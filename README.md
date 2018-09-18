@@ -1,0 +1,2 @@
+# SpecificaThor
+Generic Specification Structure
