@@ -164,7 +164,7 @@ namespace SpecificaThor
                     return this;
                 }
 
-                public IEnumerable<TOperatorContract> GetMatch()
+                public IEnumerable<TOperatorContract> GetMatched()
                     => _subjects.Where(subject => _validationGroups.Any(
                                             group => group.IsGroupValid(subject)));
             }
