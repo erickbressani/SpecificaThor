@@ -3,18 +3,18 @@ using System.Linq;
 
 namespace SpecificaThor
 {
-    public class ValidationGroup<TContract>
+    internal class ValidationGroup<TContract>
     {
-        private List<Validator<TContract>> _validations;
+        private List<SpecificationValidatorDecorator<TContract>> _validations;
 
         public ValidationGroup()
         {
-            _validations = new List<Validator<TContract>>();
+            _validations = new List<SpecificationValidatorDecorator<TContract>>();
         }
 
-        public void AddToGroup<TRule>(bool expected) where TRule : IRule<TContract>, new()
+        public void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TContract>, new()
         {
-            var validator = Validator<TContract>.CreateWithRule<TRule>(expected);
+            var validator = SpecificationValidatorDecorator<TContract>.CreateWithRule<TSpecification>(expecting);
             _validations.Add(validator);
         }
 
@@ -27,21 +27,27 @@ namespace SpecificaThor
         {
             var failures = _validations.FindAll(validator => !validator.Validate(contract));
 
-            foreach (Validator<TContract> validator in failures)
-                yield return validator.GetErrorMessage(contract);
+            foreach (SpecificationValidatorDecorator<TContract> validator in failures)
+            {
+                string error = validator.GetErrorMessage(contract);
+
+                if (!string.IsNullOrEmpty(error))
+                    yield return error;
+            }
+
         }
     }
 
-    public static class ValidationGroupExtensions
+    internal static class ValidationGroupExtensions
     {
         public static void AddGroup<TContract>(this List<ValidationGroup<TContract>> source)
         {
             source.Add(new ValidationGroup<TContract>());
         }
 
-        public static void AddToGroup<TRule, TContract>(this List<ValidationGroup<TContract>> source, bool expected) where TRule : IRule<TContract>, new()
+        public static void AddToGroup<TSpecification, TContract>(this List<ValidationGroup<TContract>> source, Expecting expecting) where TSpecification : ISpecification<TContract>, new()
         {
-            source.Last().AddToGroup<TRule>(expected);
+            source.Last().AddToGroup<TSpecification>(expecting);
         }
     }
 }
