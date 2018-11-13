@@ -2,6 +2,8 @@
 {
     internal class SpecificationValidatorDecorator<TContract>
     {
+        public string CustomErrorMessage { get; set; }
+
         private Expecting _expecting;
         private ISpecification<TContract> _specification;
 
@@ -23,18 +25,12 @@
 
         public string GetErrorMessage(TContract contract)
         {
-            if (_expecting == Expecting.True && _specification is IHasDefaultExpectingTrueErrorMessage<TContract>)
-            {
-                var specification = (_specification as IHasDefaultExpectingTrueErrorMessage<TContract>);
-                return specification.GetErrorMessageExpectingTrue(contract);
-            }
-            else if (_expecting == Expecting.False && _specification is IHasDefaultExpectingFalseErrorMessage<TContract>)
-            {
-                var specification = (_specification as IHasDefaultExpectingFalseErrorMessage<TContract>);
-                return specification.GetErrorMessageExpectingFalse(contract);
-            }
+            if (!string.IsNullOrEmpty(CustomErrorMessage))
+                return CustomErrorMessage;
+            else if (_expecting == Expecting.True)
+                return (_specification as IHasDefaultExpectingTrueErrorMessage<TContract>)?.GetErrorMessageExpectingTrue(contract);
 
-            return null;
+            return (_specification as IHasDefaultExpectingFalseErrorMessage<TContract>)?.GetErrorMessageExpectingFalse(contract);
         }
     }
 }

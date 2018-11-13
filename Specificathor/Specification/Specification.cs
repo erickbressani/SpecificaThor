@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SpecificaThor
@@ -6,19 +7,10 @@ namespace SpecificaThor
     public static class Specification
     {
         public static ValidationSpecification<TContract> Create<TContract>(TContract contract)
-        {
-            return new ValidationSpecification<TContract>(contract);
-        }
+            => new ValidationSpecification<TContract>(contract);
 
         public static EnumerableSpecification<TContract> Create<TContract>(IEnumerable<TContract> subjects)
-        {
-            return new EnumerableSpecification<TContract>(subjects);
-        }
-
-        public static EnumerableSpecification<TContract> Create<TContract>(IQueryable<TContract> subjects)
-        {
-            return new EnumerableSpecification<TContract>(subjects);
-        }
+            => new EnumerableSpecification<TContract>(subjects);
 
         public sealed class ValidationSpecification<TValidationContract>
         {
@@ -30,14 +22,10 @@ namespace SpecificaThor
             }
 
             public ContractOperator<TValidationContract> Is<TSpecification>() where TSpecification : ISpecification<TValidationContract>, new()
-            {
-                return CreateOperator<TSpecification>(Expecting.True);
-            }
+                => CreateOperator<TSpecification>(Expecting.True);
 
             public ContractOperator<TValidationContract> IsNot<TSpecification>() where TSpecification : ISpecification<TValidationContract>, new()
-            {
-                return CreateOperator<TSpecification>(Expecting.False);
-            }
+                => CreateOperator<TSpecification>(Expecting.False);
 
             private ContractOperator<TValidationContract> CreateOperator<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TValidationContract>, new()
             {
@@ -61,9 +49,7 @@ namespace SpecificaThor
                 }
 
                 internal void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TOperatorContract>, new()
-                {
-                    _validationGroups.AddToGroup<TSpecification, TOperatorContract>(expecting);
-                }
+                    => _validationGroups.AddToGroup<TSpecification, TOperatorContract>(expecting);
 
                 public ContractOperator<TOperatorContract> OrIs<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
                 {
@@ -91,22 +77,23 @@ namespace SpecificaThor
                     return this;
                 }
 
+                public ContractOperator<TOperatorContract> UseThisErrorMessageIfFails(string errorMessage)
+                {
+                    _validationGroups.GetLastAddedValidator().CustomErrorMessage = errorMessage;
+                    return this;
+                }
+
                 public SpecificationResult IsSatisfied()
                 {
                     foreach (ValidationGroup<TOperatorContract> validationGroup in _validationGroups)
                     {
                         var errors = validationGroup.GetFailures(_contract);
+                        _result.IsValid = !errors.Any();
 
-                        if (errors.Any())
-                        {
-                            _result.AddErrors(errors);
-                            _result.IsValid = false;
-                        }
-                        else
-                        {
-                            _result.IsValid = true;
+                        if (_result.IsValid)
                             break;
-                        }
+                        else
+                            _result.AddErrors(errors);
                     }
 
                     return _result;
@@ -124,14 +111,10 @@ namespace SpecificaThor
             }
 
             public EnumerableOperator<TEnumerableContract> ThatAre<TSpecification>() where TSpecification : ISpecification<TEnumerableContract>, new()
-            {
-                return EnumerableOperator<TEnumerableContract>.Create<TSpecification>(_subjects, Expecting.True);
-            }
+                => EnumerableOperator<TEnumerableContract>.Create<TSpecification>(_subjects, Expecting.True);
 
             public EnumerableOperator<TEnumerableContract> ThatAreNot<TSpecification>() where TSpecification : ISpecification<TEnumerableContract>, new()
-            {
-                return EnumerableOperator<TEnumerableContract>.Create<TSpecification>(_subjects, Expecting.False);
-            }
+                => EnumerableOperator<TEnumerableContract>.Create<TSpecification>(_subjects, Expecting.False);
 
             public class EnumerableOperator<TOperatorContract>
             {
@@ -153,9 +136,7 @@ namespace SpecificaThor
                 }
 
                 internal void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TOperatorContract>, new()
-                {
-                    _validationGroups.AddToGroup<TSpecification, TOperatorContract>(expecting);
-                }
+                    => _validationGroups.AddToGroup<TSpecification, TOperatorContract>(expecting);
 
                 public EnumerableOperator<TOperatorContract> AndAre<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
                 {
@@ -184,10 +165,8 @@ namespace SpecificaThor
                 }
 
                 public IEnumerable<TOperatorContract> GetMatch()
-                {
-                    return _subjects.Where(subject => _validationGroups.Any(
-                                                group => group.IsGroupValid(subject)));
-                }
+                    => _subjects.Where(subject => _validationGroups.Any(
+                                            group => group.IsGroupValid(subject)));
             }
         }
     }

@@ -12,7 +12,8 @@ namespace SpecificaThor
         {
             get
             {
-                return string.Join("\n", _errors.Distinct());
+                return string.Join("\n", _errors.Where(error => !string.IsNullOrEmpty(error))
+                                                .Distinct());
             }
         }
 
@@ -23,8 +24,6 @@ namespace SpecificaThor
         }
 
         internal void AddErrors(IEnumerable<string> errors)
-        {
-            _errors.AddRange(errors);
-        }
+            => _errors.AddRange(errors);
     }
 }
