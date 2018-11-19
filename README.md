@@ -1,2 +1,2 @@
-# SpecificaThor (Work in Progress)
+# SpecificaThor
 Fluent Generic Specification Structure merged with a Notification Pattern
