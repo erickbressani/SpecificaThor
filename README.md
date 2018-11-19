@@ -5,6 +5,7 @@ Fluent Generic Specification Structure merged with a Notification Pattern
 
 Sample of an Entity:
 
+```
   public class Lot
   {
       public long Id { get; set; }
@@ -13,9 +14,11 @@ Sample of an Entity:
       public DateTime ExpirationDate { get; set; }
       public int AvailableQuantity { get; set; }
   }
+```
 
 Sample of a Specification Class: 
 
+```
   public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
   {
       public string GetErrorMessageWhenExpectingFalse(Lot contract)
@@ -24,14 +27,17 @@ Sample of a Specification Class:
       public bool Validate(Lot contract)
           => contract.ExpirationDate.Date <= DateTime.Now.Date;
   }
+```
   
 Validating:
 
+```
 SpecificationResult specificationResult = Specification.Create(lot)
                                                        .IsNot<Expired>()
                                                        .AndIsNot<Interdicted>()
                                                        .OrIs<AvailableOnStock>()
                                                        .IsSatisfied();
+```
 
 SpecificationResult:
  - Properties:
@@ -43,8 +49,10 @@ SpecificationResult:
   
 Filtering:
 
+```
 IEnumerable<Lot> result = Specification.Create<Lot>(lots)
                                        .ThatAre<Expired>()
                                        .AndAre<Interdicted>()
                                        .OrAre<AvailableOnStock>()
                                        .GetMatched();
+```
