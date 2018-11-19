@@ -13,24 +13,31 @@
             _expecting = expecting;
         }
 
-        public static SpecificationValidatorDecorator<TContract> CreateWithRule<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TContract>, new()
+        public static SpecificationValidatorDecorator<TContract> CreateWithSpecification<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TContract>, new()
         {
             return new SpecificationValidatorDecorator<TContract>(new TSpecification(), expecting);
         }
 
         public bool Validate(TContract contract)
         {
-            return _specification.Validate(contract) && _expecting == Expecting.True;
+            bool expecting = _expecting == Expecting.True;
+            return _specification.Validate(contract) == expecting;
         }
 
-        public string GetErrorMessage(TContract contract)
+        public SpecificationError<TContract> GetSpecificationError(TContract contract)
+        {
+            string errorMessage = GetErrorMessage(contract);
+            return new SpecificationError<TContract>(_specification, errorMessage);
+        }
+
+        private string GetErrorMessage(TContract contract)
         {
             if (!string.IsNullOrEmpty(CustomErrorMessage))
                 return CustomErrorMessage;
             else if (_expecting == Expecting.True)
-                return (_specification as IHasDefaultExpectingTrueErrorMessage<TContract>)?.GetErrorMessageExpectingTrue(contract);
+                return (_specification as IHasErrorMessageWhenExpectingTrue<TContract>)?.GetErrorMessageWhenExpectingTrue(contract);
 
-            return (_specification as IHasDefaultExpectingFalseErrorMessage<TContract>)?.GetErrorMessageExpectingFalse(contract);
+            return (_specification as IHasErrorMessageWhenExpectingFalse<TContract>)?.GetErrorMessageWhenExpectingFalse(contract);
         }
     }
 }

@@ -37,13 +37,13 @@ namespace SpecificaThor
             public sealed class ContractOperator<TOperatorContract>
             {
                 private readonly TOperatorContract _contract;
-                private readonly SpecificationResult _result;
+                private readonly SpecificationResult<TOperatorContract> _result;
                 private readonly List<ValidationGroup<TOperatorContract>> _validationGroups;
 
                 internal ContractOperator(TOperatorContract contract)
                 {
                     _contract = contract;
-                    _result = new SpecificationResult();
+                    _result = new SpecificationResult<TOperatorContract>();
                     _validationGroups = new List<ValidationGroup<TOperatorContract>>();
                     _validationGroups.AddGroup();
                 }
@@ -83,7 +83,7 @@ namespace SpecificaThor
                     return this;
                 }
 
-                public SpecificationResult IsSatisfied()
+                public SpecificationResult<TOperatorContract> IsSatisfied()
                 {
                     foreach (ValidationGroup<TOperatorContract> validationGroup in _validationGroups)
                     {

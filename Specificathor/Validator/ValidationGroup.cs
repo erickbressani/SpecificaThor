@@ -14,7 +14,7 @@ namespace SpecificaThor
 
         public void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TContract>, new()
         {
-            var validator = SpecificationValidatorDecorator<TContract>.CreateWithRule<TSpecification>(expecting);
+            var validator = SpecificationValidatorDecorator<TContract>.CreateWithSpecification<TSpecification>(expecting);
             _validations.Add(validator);
         }
 
@@ -24,12 +24,12 @@ namespace SpecificaThor
         public SpecificationValidatorDecorator<TContract> Last()
             => _validations.Last();
 
-        public IEnumerable<string> GetFailures(TContract contract)
+        public IEnumerable<SpecificationError<TContract>> GetFailures(TContract contract)
         {
             var failures = _validations.GetFailures(contract);
 
             foreach (SpecificationValidatorDecorator<TContract> validator in failures)
-                yield return validator.GetErrorMessage(contract);
+                yield return validator.GetSpecificationError(contract);
         }
     }
 

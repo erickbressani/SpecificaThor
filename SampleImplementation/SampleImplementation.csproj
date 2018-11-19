@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="SampleMethods\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Specificathor\SpecificaThor.csproj" />
   </ItemGroup>
 
