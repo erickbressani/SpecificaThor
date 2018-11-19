@@ -16,7 +16,7 @@ Sample of an Entity:
   }
 ```
 
-Sample of a Specification Class: 
+Sample of a Specification Classes: 
 
 ```
   public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
@@ -26,6 +26,18 @@ Sample of a Specification Class:
 
       public bool Validate(Lot contract)
           => contract.ExpirationDate.Date <= DateTime.Now.Date;
+  }
+  
+  public class AvailableOnStock : ISpecification<Lot>, IHasErrorMessageWhenExpectingTrue<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
+  {
+      public string GetErrorMessageWhenExpectingFalse(Lot contract)
+          => $"Lot {contract.LotNumber} is available on stock";
+
+      public string GetErrorMessageWhenExpectingTrue(Lot contract)
+          => $"Lot {contract.LotNumber} is not available on stock. Current Quantity: {contract.AvailableQuantity}";
+
+      public bool Validate(Lot contract)
+          => contract.AvailableQuantity > 0;
   }
 ```
   
