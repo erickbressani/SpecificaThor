@@ -4,20 +4,20 @@ namespace SpecificaThor
 {
     internal class SpecificationError<TContract>
     {
-        private ISpecification<TContract> _specificationType;
+        private ISpecification<TContract> _specification;
         public string ErrorMessage { get; private set; }
 
         public SpecificationError(ISpecification<TContract> specificationType, string errorMessage)
         {
-            _specificationType = specificationType;
+            _specification = specificationType;
             ErrorMessage = errorMessage;
         }
 
         public bool Is<TSpecification>() where TSpecification : ISpecification<TContract>
-            => _specificationType is TSpecification;
+            => _specification is TSpecification;
 
         internal Type GetSpecificationType()
-            => _specificationType.GetType();
+            => _specification.GetType();
 
         public override bool Equals(object obj)
             => GetSpecificationType() == (obj as SpecificationError<TContract>).GetSpecificationType();
