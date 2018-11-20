@@ -26,7 +26,7 @@ namespace SampleTests
                                       .IsNot<Expired>()
                                       .AndIsNot<Interdicted>()
                                       .AndIs<AvailableOnStock>()
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.False(result.IsValid);
             Assert.True(string.Equals(result.ErrorMessage, fullErrorMessage, StringComparison.InvariantCultureIgnoreCase));
@@ -53,7 +53,7 @@ namespace SampleTests
                                       .IsNot<Expired>()
                                       .AndIsNot<Interdicted>()
                                       .AndIs<AvailableOnStock>()
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.False(result.IsValid);
             Assert.Equal(result.ErrorMessage, fullErrorMessage);
@@ -74,7 +74,7 @@ namespace SampleTests
             var result = Specification.Create(lot)
                                       .IsNot<Expired>()
                                       .OrIs<AvailableOnStock>()
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.True(result.IsValid);
             Assert.True(result.TotalOfErrors == 0);
@@ -92,7 +92,7 @@ namespace SampleTests
             var result = Specification.Create(lot)
                                       .Is<Expired>()
                                       .OrIsNot<AvailableOnStock>()
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.True(result.IsValid);
             Assert.True(result.TotalOfErrors == 0);
@@ -118,7 +118,7 @@ namespace SampleTests
                                       .OrIs<Expired>()
                                       .AndIs<AvailableOnStock>()
                                       .AndIsNot<Interdicted>()
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.True(result.IsValid);
             Assert.True(result.TotalOfErrors == 0);
@@ -146,7 +146,7 @@ namespace SampleTests
                                       .OrIs<Expired>()
                                       .AndIs<AvailableOnStock>()
                                       .AndIsNot<Interdicted>()
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.True(result.IsValid);
             Assert.True(result.TotalOfErrors == 0);
@@ -174,7 +174,7 @@ namespace SampleTests
                                       .OrIs<Expired>()
                                       .AndIs<AvailableOnStock>()
                                       .AndIsNot<Interdicted>()
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.True(result.IsValid);
             Assert.True(result.TotalOfErrors == 0);
@@ -202,7 +202,7 @@ namespace SampleTests
                                       .OrIs<Expired>()
                                       .AndIs<AvailableOnStock>()
                                       .AndIsNot<Interdicted>()
-                                      .IsSatisfied();
+                                      .GetResult();
 
 
             Assert.False(result.IsValid);
@@ -221,7 +221,7 @@ namespace SampleTests
 
             var result = Specification.Create(lot)
                                       .Is<Expired>()
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.False(result.IsValid);
             Assert.True(result.TotalOfErrors == 1);
@@ -240,7 +240,7 @@ namespace SampleTests
             var result = Specification.Create(lot)
                                       .IsNot<Expired>()
                                       .UseThisErrorMessageIfFails(customErrorMessage)
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.False(result.IsValid);
             Assert.Equal(result.ErrorMessage, customErrorMessage);
@@ -260,7 +260,7 @@ namespace SampleTests
             var result = Specification.Create(lot)
                                       .Is<Expired>()
                                       .UseThisErrorMessageIfFails(customErrorMessage)
-                                      .IsSatisfied();
+                                      .GetResult();
 
             Assert.False(result.IsValid);
             Assert.Equal(result.ErrorMessage, customErrorMessage);
