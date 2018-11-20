@@ -48,7 +48,7 @@ SpecificationResult specificationResult = Specification.Create(lot)
                                                        .IsNot<Expired>()
                                                        .AndIsNot<Interdicted>()
                                                        .OrIs<AvailableOnStock>()
-                                                       .IsSatisfied();
+                                                       .GetResult();
 
 ```
 ```
