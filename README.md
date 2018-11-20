@@ -1,5 +1,9 @@
 # SpecificaThor
-Fluent Specification Structure merged with a Notification Pattern
+.NET Core Fluent Specification Structure combined with a Notification Pattern
+
+# Nuget
+
+> Install-Package SpecificaThor -Version 1.0.0
 
 # Usage
 
