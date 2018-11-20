@@ -1,5 +1,5 @@
 # SpecificaThor
-Fluent Specification Structure merged with a Notification Pattern
+Fluent Specification Structure combined with a Notification Pattern
 
 # Usage
 
