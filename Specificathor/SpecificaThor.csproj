@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>.NET Core Fluent Specification Structure combined with a Notification Pattern</Description>
+    <Authors>Erick Bressani</Authors>
+    <Company />
+    <PackageTags>Specification;Notification;Fluent;.NET Core</PackageTags>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>
