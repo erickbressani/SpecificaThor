@@ -7,9 +7,9 @@
         private Expecting _expecting;
         private ISpecification<TContract> _specification;
 
-        private SpecificationValidatorDecorator(ISpecification<TContract> rule, Expecting expecting)
+        private SpecificationValidatorDecorator(ISpecification<TContract> specification, Expecting expecting)
         {
-            _specification = rule;
+            _specification = specification;
             _expecting = expecting;
         }
 
