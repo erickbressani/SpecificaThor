@@ -3,7 +3,7 @@
 
 # Nuget
 
-> Install-Package SpecificaThor -Version 1.0.0
+> Install-Package SpecificaThor -Version 1.0.1
 
 # Usage
 
@@ -52,7 +52,10 @@ SpecificationResult specificationResult = Specification.Create(lot)
                                                        .IsNot<Expired>()
                                                        .AndIsNot<Interdicted>()
                                                        .OrIs<AvailableOnStock>()
+                                                       .AndIs<Expired>()
                                                        .GetResult();
+//It should work like that:                                                       
+//if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))
 
 ```
 ```
@@ -72,4 +75,7 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
                                        .AndAre<Interdicted>()
                                        .OrAre<AvailableOnStock>()
                                        .GetMatched();
+
+//It should work like that:         
+//lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))
 ```
