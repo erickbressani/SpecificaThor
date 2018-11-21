@@ -3,7 +3,7 @@
 
 # Nuget
 
-> Install-Package SpecificaThor -Version 1.0.0
+> Install-Package SpecificaThor -Version 1.0.1
 
 # Usage
 
