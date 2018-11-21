@@ -55,7 +55,7 @@ SpecificationResult specificationResult = Specification.Create(lot)
                                                        .AndIs<Expired>()
                                                        .GetResult();
 //It should work like that:                                                       
-//if ((!Expired && !Interdicted) || (AvailableOnStock && Expired))
+//if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))
 
 ```
 ```
