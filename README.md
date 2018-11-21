@@ -75,4 +75,7 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
                                        .AndAre<Interdicted>()
                                        .OrAre<AvailableOnStock>()
                                        .GetMatched();
+
+//It should work like that:         
+//lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))
 ```
