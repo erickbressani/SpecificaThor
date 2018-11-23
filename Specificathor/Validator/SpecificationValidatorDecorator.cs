@@ -14,9 +14,7 @@
         }
 
         public static SpecificationValidatorDecorator<TContract> CreateWithSpecification<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TContract>, new()
-        {
-            return new SpecificationValidatorDecorator<TContract>(new TSpecification(), expecting);
-        }
+            => new SpecificationValidatorDecorator<TContract>(new TSpecification(), expecting);
 
         public bool Validate(TContract contract)
         {
