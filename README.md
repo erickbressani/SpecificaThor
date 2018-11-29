@@ -57,6 +57,14 @@ SpecificationResult specificationResult = Specification.Create(lot)
 //It should work like that:                                                       
 //if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))
 
+//You can set a custom message on the specification chain like this
+
+... Specification.Create(lot)
+                 .Is<Expired>()
+                 .UseThisErrorMessageIfFails("This is a custom error message") //If the lot is not expired this message will be used
+                 .AndIsNot<Interdicted>()
+                 .GetResult();
+
 ```
 ```
 SpecificationResult:
@@ -79,3 +87,4 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
 //It should work like that:         
 //lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))
 ```
+
