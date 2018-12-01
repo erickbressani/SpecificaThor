@@ -1,5 +1,5 @@
 # SpecificaThor
-.NET Core Fluent Specification Structure combined with a Notification Pattern
+.NET Standard Fluent Specification Structure combined with a Notification Pattern
 
 # Nuget
 
