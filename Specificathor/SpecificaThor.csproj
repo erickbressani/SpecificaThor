@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>.NET Core Fluent Specification Structure combined with a Notification Pattern</Description>
+    <Description>.NET Standard Fluent Specification Structure combined with a Notification Pattern</Description>
     <Authors>Erick Bressani</Authors>
     <Company />
-    <PackageTags>Specification;Notification;Fluent;.NET Core</PackageTags>
-    <Version>1.0.1</Version>
+    <PackageTags>Specification;Notification;Fluent;.NET Standard</PackageTags>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
 </Project>
