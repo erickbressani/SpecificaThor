@@ -2,13 +2,10 @@
 .NET Standard Fluent Specification Structure combined with a Notification Pattern
 
 # Nuget
-
-> Install-Package SpecificaThor -Version 1.0.1
+> Install-Package SpecificaThor -Version 1.1.0
 
 # Usage
-
 Sample of an Entity:
-
 ```
   public class Lot
   {
@@ -20,8 +17,7 @@ Sample of an Entity:
   }
 ```
 
-Sample of a Specification Classes: 
-
+# Sample of a Specification Classes: 
 ```
   public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
   {
@@ -44,9 +40,8 @@ Sample of a Specification Classes:
           => contract.AvailableQuantity > 0;
   }
 ```
-  
-Validating:
 
+# Validating:
 ```
 SpecificationResult specificationResult = Specification.Create(lot)
                                                        .IsNot<Expired>()
@@ -75,8 +70,8 @@ SpecificationResult:
  - Method:
     result.HasError<T>() //Returns true if the result contains an error on an specific validation. Sample: result.HasError<Expired>()
  ``` 
-Filtering:
 
+# Filtering:
 ```
 IEnumerable<Lot> result = Specification.Create<Lot>(lots)
                                        .ThatAre<Expired>()
