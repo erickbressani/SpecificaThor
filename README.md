@@ -90,12 +90,12 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
 
 ...
 var result = await _dbContext.Products
-							 .Include(o => o.Lots)
-               **.GetSubjects()** //This is the same as Specification.Create<Lot>(lots)
-               .ThatAre<Expired>()
-               .AndAre<Interdicted>()
-               .GetMatched()
-							 .ToListAsync();
+			     .Include(o => o.Lots)
+			     .GetSubjects() //This is the same as Specification.Create<Lot>(lots)
+			     .ThatAre<Expired>()
+			     .AndAre<Interdicted>()
+			     .GetMatched()
+			     .ToListAsync();
 
 ```
 
