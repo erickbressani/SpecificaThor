@@ -153,5 +153,42 @@ namespace SampleTests
 
             Assert.True(result.Count() == 0);
         }
+
+        [Fact]
+        public void EnumerableExtension()
+        {
+            var lots = new List<Lot>();
+
+            var lot1 = new LotBuilder()
+                            .Expired()
+                            .Interdicted()
+                            .NotAvailableOnStock()
+                            .Build();
+
+            var lot2 = new LotBuilder()
+                            .Expired()
+                            .NotInterdicted()
+                            .NotAvailableOnStock()
+                            .Build();
+
+            var lot3 = new LotBuilder()
+                            .NotExpired()
+                            .Interdicted()
+                            .NotAvailableOnStock()
+                            .Build();
+            lots.Add(lot1);
+            lots.Add(lot2);
+            lots.Add(lot3);
+
+            IEnumerable<Lot> result = lots.GetSubjects()
+                                          .ThatAre<Expired>()
+                                          .AndAre<Interdicted>()
+                                          .GetMatched();
+
+            Assert.True(result.Count() == 1);
+            Assert.Contains(lot1, result);
+            Assert.DoesNotContain(lot2, result);
+            Assert.DoesNotContain(lot3, result);
+        }
     }
 }
