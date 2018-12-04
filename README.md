@@ -108,7 +108,7 @@ The method GetResult() will return the class SpecificationResult, which contains
  - Method:
     - HasError\<T\>(): bool 
     	- Returns true if the result contains an error on a specific validation;
-        - Sample: result.HasError<Expired>()
+        - Sample: result.HasError\<Expired\>()
 
 #### Filtering:
 ```
@@ -123,7 +123,7 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
 It should work like that:         
 *lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))*
 
-IEnumerable extension method GetSubjects() creates a specification chain, useful to fluently filter a Linq Query.
+It also contains an IEnumerable extension method GetSubjects() creates a specification chain, useful to fluently filter a Linq Query.
 
 Like this sample using Entity Framework:
 
