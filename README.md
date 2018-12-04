@@ -48,7 +48,7 @@ public class Lot
 }
 ```
 
-#### Sample of Specification Classes: 
+#### Concrete Specification Classes: 
 ```
 public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
 {
