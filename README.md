@@ -43,6 +43,9 @@ Sample of an Entity:
 
 # Validating:
 ```
+...
+Lot lot = ...;
+
 SpecificationResult specificationResult = Specification.Create(lot)
                                                        .IsNot<Expired>()
                                                        .AndIsNot<Interdicted>()
@@ -73,6 +76,8 @@ SpecificationResult:
 
 # Filtering:
 ```
+//lots is an IEnumerable<Lot>
+...
 IEnumerable<Lot> result = Specification.Create<Lot>(lots)
                                        .ThatAre<Expired>()
                                        .AndAre<Interdicted>()
@@ -90,7 +95,7 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
 
 ...
 var result = await _dbContext.Products
-			     .Include(o => o.Lots)
+			     .Include(product => product.Lots)
 			     .GetSubjects() //This is the same as Specification.Create<Lot>(lots)
 			     .ThatAre<Expired>()
 			     .AndAre<Interdicted>()
