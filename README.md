@@ -123,7 +123,7 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
 It should work like that:         
 *lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))*
 
-It also contains an IEnumerable extension method GetSubjects() creates a specification chain, useful to fluently filter a Linq Query.
+It also contains an IEnumerable extension method GetSubjects() that creates a specification chain, useful to fluently filter a Linq Query.
 
 Like this sample using Entity Framework:
 
