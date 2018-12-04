@@ -101,6 +101,5 @@ var result = await _dbContext.Products
 			     .AndAre<Interdicted>()
 			     .GetMatched()
 			     .ToListAsync();
-
 ```
 
