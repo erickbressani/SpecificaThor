@@ -16,9 +16,7 @@ public interface ISpecification<TContract>
     bool Validate(TContract contract);
 }
 ```
-If you want to have an error message if the specification rule is expecting *true*. 
-When using the specification chain methods: "Is()", "AndIs()", "OrIs()".
-Implement this Interface to build your error message.
+If you want to have an error message if the specification rule is expecting *true*, when using the specification chain methods: "Is()", "AndIs()", "OrIs()". Then implement this Interface to build your error message.
 
 ```
 public interface IHasErrorMessageWhenExpectingTrue<TContract>
@@ -27,9 +25,7 @@ public interface IHasErrorMessageWhenExpectingTrue<TContract>
 }
 ```
 
-If you want to have an error message if the specification rule is expecting *false*. 
-When using the specification chain methods: "IsNot()", "AndIsNot()", "OrIsNot()".
-Implement this Interface to build your error message.
+If you want to have an error message if the specification rule is expecting *false*, when using the specification chain methods: "IsNot()", "AndIsNot()", "OrIsNot()". Then implement this Interface to build your error message.
 
 ```
 public interface IHasErrorMessageWhenExpectingFalse<TContract>
