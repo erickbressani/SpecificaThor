@@ -83,26 +83,26 @@ SpecificationResult specificationResult = Specification.Create(lot)
                                                        .OrIs<AvailableOnStock>()
                                                        .AndIs<Expired>()
                                                        .GetResult();
-//It should work like that:                                                       
-//if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))
+```
+It should work like that:                                                       
+if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))
 
-//You can set a custom message on the specification chain like this
-
+You can set a custom message on the specification chain like this
+```
 ... Specification.Create(lot)
-                 .Is<Expired>()
-                 .UseThisErrorMessageIfFails("This is a custom error message") //If the lot is not expired this message will be used
+                 .IsNot<Expired>()
+                 .UseThisErrorMessageIfFails("This is a custom error message") //If the lot is expired this message will be used
                  .AndIsNot<Interdicted>()
                  .GetResult();
-
 ```
 
-Class SpecificationResult:
+The method GetResult() will return the class SpecificationResult, which contains:
  - Properties:
     - IsValid: bool 
     	- True if the validation sequence is succeeded;
     - ErrorMessage: string
     	- All error messages concatenated;
-    - TotalOfErrors: int 
+    - TotalOfErrors: int
     	- As the name says: Total number of Errors;
  - Method:
     - HasError<T>(): bool 
