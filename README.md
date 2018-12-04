@@ -17,7 +17,7 @@ Sample of an Entity:
   }
 ```
 
-# Sample of a Specification Classes: 
+# Sample of Specification Classes: 
 ```
   public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
   {
