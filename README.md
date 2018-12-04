@@ -5,7 +5,7 @@
 > Install-Package SpecificaThor -Version 1.1.0
 
 ## Usage
-Dummy class:
+Dummy entity/poco class:
 ```
   public class Lot
   {
