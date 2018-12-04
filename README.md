@@ -5,7 +5,7 @@
 > Install-Package SpecificaThor -Version 1.1.0
 
 ## Usage
-Sample of an Entity:
+Sample of a dummy class:
 ```
   public class Lot
   {
