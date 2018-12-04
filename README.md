@@ -87,7 +87,7 @@ SpecificationResult specificationResult = Specification.Create(lot)
 It should work like that:                                                       
 *if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))*
 
-You can set a custom message on the specification chain like this
+You can set a custom message on the specification chain like this:
 ```
 ... Specification.Create(lot)
                  .IsNot<Expired>()
