@@ -8,8 +8,7 @@
 
 ### Interfaces 
 
-The concrete Specification class needs to implement this interface.
-Which will represent the that will be validated or filtered.
+The concrete Specification class needs to implement this interface, which will represent the that will be validated or filtered.
 
 ```
 public interface ISpecification<TContract>
