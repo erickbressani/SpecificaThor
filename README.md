@@ -85,7 +85,7 @@ SpecificationResult specificationResult = Specification.Create(lot)
                                                        .GetResult();
 ```
 It should work like that:                                                       
-if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))
+- if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))
 
 You can set a custom message on the specification chain like this
 ```
@@ -119,16 +119,15 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
                                        .AndAre<Interdicted>()
                                        .OrAre<AvailableOnStock>()
                                        .GetMatched();
+```
+It should work like that:         
+- lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))
 
-//It should work like that:         
-//lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))
+IEnumerable extension method GetSubjects() creates a specification chain, useful to fluently filter a Linq Query.
 
-...
+Like this sample using Entity Framework:
 
-//IEnumerable extension method GetSubjects() creates a specification chain
-//Useful to fluently filter a Linq Query
-//Like this sample using Entity Framework:
-
+```
 ...
 var result = await _dbContext.Products
 			    .Include(product => product.Lots)
