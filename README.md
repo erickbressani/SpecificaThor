@@ -91,7 +91,8 @@ You can set a custom message on the specification chain like this
 ```
 ... Specification.Create(lot)
                  .IsNot<Expired>()
-                 .UseThisErrorMessageIfFails("This is a custom error message") //If the lot is expired this message will be used
+                 .UseThisErrorMessageIfFails("This is a custom error message") 
+		 //If the lot is expired the message above will be used
                  .AndIsNot<Interdicted>()
                  .GetResult();
 ```
