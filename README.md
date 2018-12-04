@@ -85,7 +85,7 @@ SpecificationResult specificationResult = Specification.Create(lot)
                                                        .GetResult();
 ```
 It should work like that:                                                       
-- if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))
+*if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))*
 
 You can set a custom message on the specification chain like this
 ```
@@ -106,7 +106,7 @@ The method GetResult() will return the class SpecificationResult, which contains
     - TotalOfErrors: int
     	- As the name says: Total number of Errors;
  - Method:
-    - HasError<T>(): bool 
+    - HasError\<T\>(): bool 
     	- Returns true if the result contains an error on a specific validation;
         - Sample: result.HasError<Expired>()
 
@@ -121,7 +121,7 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
                                        .GetMatched();
 ```
 It should work like that:         
-- lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))
+*lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))*
 
 IEnumerable extension method GetSubjects() creates a specification chain, useful to fluently filter a Linq Query.
 
