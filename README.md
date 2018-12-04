@@ -64,15 +64,19 @@ SpecificationResult specificationResult = Specification.Create(lot)
                  .GetResult();
 
 ```
-```
-SpecificationResult:
+
+Class SpecificationResult:
  - Properties:
-    specificationResult.IsValid //bool: True if the validation sequence is succeeded;
-    specificationResult.ErrorMessage //String: All error messages concatenated;
-    specificationResult.TotalOfErrors //int: As the name says: Total number of Errors;
+    - IsValid: bool 
+    	- True if the validation sequence is succeeded;
+    - ErrorMessage: string
+    	- All error messages concatenated;
+    - TotalOfErrors: int 
+    	- As the name says: Total number of Errors;
  - Method:
-    result.HasError<T>() //Returns true if the result contains an error on an specific validation. Sample: result.HasError<Expired>()
- ``` 
+    - HasError<T>(): bool 
+	- Returns true if the result contains an error on an specific validation. 
+	- Sample: result.HasError<Expired>()
 
 ### Filtering:
 ```
