@@ -5,7 +5,7 @@
 > Install-Package SpecificaThor -Version 1.1.0
 
 ## Usage
-Sample of a dummy class:
+Dummy class:
 ```
   public class Lot
   {
