@@ -75,7 +75,7 @@ Class SpecificationResult:
     	- As the name says: Total number of Errors;
  - Method:
     - HasError<T>(): bool 
-    	- Returns true if the result contains an error on an specific validation;
+    	- Returns true if the result contains an error on a specific validation;
         - Sample: result.HasError<Expired>()
 
 ### Filtering:
