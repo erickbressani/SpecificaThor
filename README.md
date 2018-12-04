@@ -17,7 +17,7 @@ Sample of an Entity:
   }
 ```
 
-## Sample of Specification Classes: 
+### Sample of Specification Classes: 
 ```
   public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
   {
@@ -41,7 +41,7 @@ Sample of an Entity:
   }
 ```
 
-## Validating:
+### Validating:
 ```
 ...
 Lot lot = ...;
@@ -74,7 +74,7 @@ SpecificationResult:
     result.HasError<T>() //Returns true if the result contains an error on an specific validation. Sample: result.HasError<Expired>()
  ``` 
 
-## Filtering:
+### Filtering:
 ```
 //lots is an IEnumerable<Lot>
 ...
