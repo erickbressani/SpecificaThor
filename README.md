@@ -5,43 +5,79 @@
 > Install-Package SpecificaThor -Version 1.1.0
 
 ## Usage
-Dummy entity/poco class:
+
+### Interfaces 
+
+The concrete Specification class needs to implement this interface
+Which will represent the that will be validated or filtered
+
 ```
-  public class Lot
-  {
-      public long Id { get; set; }
-      public string LotNumber { get; set; }
-      public bool IsInterdicted { get; set; }
-      public DateTime ExpirationDate { get; set; }
-      public int AvailableQuantity { get; set; }
-  }
+public interface ISpecification<TContract>
+{
+    bool Validate(TContract contract);
+}
+```
+If you want to have an error message if the specification rule is expecting *true*. 
+When using the specification chain methods: "Is()", "AndIs()", "OrIs()".
+Implement this Interface to build your error message.
+
+```
+public interface IHasErrorMessageWhenExpectingTrue<TContract>
+{
+    string GetErrorMessageWhenExpectingTrue(TContract contract);
+}
 ```
 
-### Sample of Specification Classes: 
-```
-  public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
-  {
-      public string GetErrorMessageWhenExpectingFalse(Lot contract)
-          => $"Lot {contract.LotNumber} is expired and connot be used";
+If you want to have an error message if the specification rule is expecting *false*. 
+When using the specification chain methods: "IsNot()", "AndIsNot()", "OrIsNot()".
+Implement this Interface to build your error message.
 
-      public bool Validate(Lot contract)
-          => contract.ExpirationDate.Date <= DateTime.Now.Date;
-  }
+```
+public interface IHasErrorMessageWhenExpectingFalse<TContract>
+{
+    string GetErrorMessageWhenExpectingFalse(TContract contract);
+}
+```
+
+### Sample
+
+#### Dummy entity/poco class:
+```
+public class Lot
+{
+    public long Id { get; set; }
+    public string LotNumber { get; set; }
+    public bool IsInterdicted { get; set; }
+    public DateTime ExpirationDate { get; set; }
+    public int AvailableQuantity { get; set; }
+}
+```
+
+#### Sample of Specification Classes: 
+```
+public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
+{
+    public string GetErrorMessageWhenExpectingFalse(Lot contract)
+        => $"Lot {contract.LotNumber} is expired and connot be used";
+
+    public bool Validate(Lot contract)
+        => contract.ExpirationDate.Date <= DateTime.Now.Date;
+}
   
-  public class AvailableOnStock : ISpecification<Lot>, IHasErrorMessageWhenExpectingTrue<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
-  {
-      public string GetErrorMessageWhenExpectingFalse(Lot contract)
-          => $"Lot {contract.LotNumber} is available on stock";
+public class AvailableOnStock : ISpecification<Lot>, IHasErrorMessageWhenExpectingTrue<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
+{
+    public string GetErrorMessageWhenExpectingFalse(Lot contract)
+        => $"Lot {contract.LotNumber} is available on stock";
 
-      public string GetErrorMessageWhenExpectingTrue(Lot contract)
-          => $"Lot {contract.LotNumber} is not available on stock. Current Quantity: {contract.AvailableQuantity}";
+    public string GetErrorMessageWhenExpectingTrue(Lot contract)
+        => $"Lot {contract.LotNumber} is not available on stock. Current Quantity: {contract.AvailableQuantity}";
 
-      public bool Validate(Lot contract)
-          => contract.AvailableQuantity > 0;
+    public bool Validate(Lot contract)
+        => contract.AvailableQuantity > 0;
   }
 ```
 
-### Validating:
+#### Validating:
 ```
 ...
 Lot lot = ...;
@@ -78,9 +114,9 @@ Class SpecificationResult:
     	- Returns true if the result contains an error on a specific validation;
         - Sample: result.HasError<Expired>()
 
-### Filtering:
+#### Filtering:
 ```
-//lots is an IEnumerable<Lot>
+IEnumerable<Lot> = ...
 ...
 IEnumerable<Lot> result = Specification.Create<Lot>(lots)
                                        .ThatAre<Expired>()
@@ -99,11 +135,11 @@ IEnumerable<Lot> result = Specification.Create<Lot>(lots)
 
 ...
 var result = await _dbContext.Products
-			     .Include(product => product.Lots)
-			     .GetSubjects() //This is the same as Specification.Create<Lot>(lots)
-			     .ThatAre<Expired>()
-			     .AndAre<Interdicted>()
-			     .GetMatched()
-			     .ToListAsync();
+			    .Include(product => product.Lots)
+			    .GetSubjects() //This is the same as Specification.Create<Lot>(lots)
+			    .ThatAre<Expired>()
+			    .AndAre<Interdicted>()
+			    .GetMatched()
+			    .ToListAsync();
 ```
 
