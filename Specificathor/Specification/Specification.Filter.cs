@@ -13,9 +13,7 @@ namespace SpecificaThor
             private readonly IEnumerable<TEnumerableContract> _subjects;
 
             public EnumerableSpecification(IEnumerable<TEnumerableContract> subjects)
-            {
-                _subjects = subjects;
-            }
+                => _subjects = subjects;
 
             public EnumerableOperator<TEnumerableContract> ThatAre<TSpecification>() where TSpecification : ISpecification<TEnumerableContract>, new()
                 => EnumerableOperator<TEnumerableContract>.Create<TSpecification>(_subjects, Expecting.True);

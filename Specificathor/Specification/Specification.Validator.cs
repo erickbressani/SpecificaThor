@@ -13,9 +13,7 @@ namespace SpecificaThor
             private readonly TValidationContract _contract;
 
             internal ValidationSpecification(TValidationContract contract)
-            {
-                _contract = contract;
-            }
+                => _contract = contract;
 
             public ContractOperator<TValidationContract> Is<TSpecification>() where TSpecification : ISpecification<TValidationContract>, new()
                 => CreateOperator<TSpecification>(Expecting.True);
