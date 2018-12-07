@@ -6,7 +6,7 @@ namespace SpecificaThor
     public class SpecificationResult<TContract>
     {
         private List<SpecificationError<TContract>> _errors;
-        public bool IsValid { get; set; }
+        public bool IsValid { get; internal set; }
 
         public string ErrorMessage => IsValid ? string.Empty : string.Join("\n", _errors.Select(error => error.ErrorMessage));
         public int TotalOfErrors => IsValid ? 0 : _errors.Count();
