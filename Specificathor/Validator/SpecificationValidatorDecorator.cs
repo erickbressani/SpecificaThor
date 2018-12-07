@@ -1,4 +1,6 @@
-﻿namespace SpecificaThor
+﻿using SpecificaThor.Enums;
+
+namespace SpecificaThor
 {
     internal class SpecificationValidatorDecorator<TContract>
     {

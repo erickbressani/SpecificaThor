@@ -1,4 +1,4 @@
-﻿namespace SpecificaThor
+﻿namespace SpecificaThor.Enums
 {
     internal enum Expecting
     {

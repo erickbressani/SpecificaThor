@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SpecificaThor.Enums;
+using SpecificaThor.Extensions;
+using SpecificaThor.Structure;
 
 namespace SpecificaThor
 {
@@ -8,78 +11,78 @@ namespace SpecificaThor
         public static ValidationSpecification<TContract> Create<TContract>(TContract contract)
             => new ValidationSpecification<TContract>(contract);
 
-        public sealed class ValidationSpecification<TValidationContract>
+        public sealed class ValidationSpecification<TContract> : IValidationSpecification<TContract>
         {
-            private readonly TValidationContract _contract;
+            private readonly TContract _contract;
 
-            internal ValidationSpecification(TValidationContract contract)
+            internal ValidationSpecification(TContract contract)
                 => _contract = contract;
 
-            public ContractOperator<TValidationContract> Is<TSpecification>() where TSpecification : ISpecification<TValidationContract>, new()
+            public IContractOperator<TContract> Is<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 => CreateOperator<TSpecification>(Expecting.True);
 
-            public ContractOperator<TValidationContract> IsNot<TSpecification>() where TSpecification : ISpecification<TValidationContract>, new()
+            public IContractOperator<TContract> IsNot<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 => CreateOperator<TSpecification>(Expecting.False);
 
-            private ContractOperator<TValidationContract> CreateOperator<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TValidationContract>, new()
+            private IContractOperator<TContract> CreateOperator<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TContract>, new()
             {
-                var contractOperator = new ContractOperator<TValidationContract>(_contract);
+                var contractOperator = new ContractOperator(_contract);
                 contractOperator.AddToGroup<TSpecification>(expecting);
                 return contractOperator;
             }
 
-            public sealed class ContractOperator<TOperatorContract>
+            public sealed class ContractOperator : IContractOperator<TContract>
             {
-                private readonly TOperatorContract _contract;
-                private readonly SpecificationResult<TOperatorContract> _result;
-                private readonly List<ValidationGroup<TOperatorContract>> _validationGroups;
+                private readonly TContract _contract;
+                private readonly SpecificationResult<TContract> _result;
+                private readonly List<ValidationGroup<TContract>> _validationGroups;
 
-                internal ContractOperator(TOperatorContract contract)
+                internal ContractOperator(TContract contract)
                 {
                     _contract = contract;
-                    _result = new SpecificationResult<TOperatorContract>();
-                    _validationGroups = new List<ValidationGroup<TOperatorContract>>();
+                    _result = new SpecificationResult<TContract>();
+                    _validationGroups = new List<ValidationGroup<TContract>>();
                     _validationGroups.AddGroup();
                 }
 
-                internal void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TOperatorContract>, new()
-                    => _validationGroups.AddToGroup<TSpecification, TOperatorContract>(expecting);
+                internal void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TContract>, new()
+                    => _validationGroups.AddToGroup<TSpecification, TContract>(expecting);
 
-                public ContractOperator<TOperatorContract> OrIs<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
+                public IContractOperator<TContract> OrIs<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 {
                     _validationGroups.AddGroup();
-                    _validationGroups.AddToGroup<TSpecification, TOperatorContract>(Expecting.True);
+                    _validationGroups.AddToGroup<TSpecification, TContract>(Expecting.True);
                     return this;
                 }
 
-                public ContractOperator<TOperatorContract> AndIs<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
+                public IContractOperator<TContract> AndIs<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 {
-                    _validationGroups.AddToGroup<TSpecification, TOperatorContract>(Expecting.True);
+                    _validationGroups.AddToGroup<TSpecification, TContract>(Expecting.True);
                     return this;
                 }
 
-                public ContractOperator<TOperatorContract> OrIsNot<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
+                public IContractOperator<TContract> OrIsNot<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 {
                     _validationGroups.AddGroup();
-                    _validationGroups.AddToGroup<TSpecification, TOperatorContract>(Expecting.False);
+                    _validationGroups.AddToGroup<TSpecification, TContract>(Expecting.False);
                     return this;
                 }
 
-                public ContractOperator<TOperatorContract> AndIsNot<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
+                public IContractOperator<TContract> AndIsNot<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 {
-                    _validationGroups.AddToGroup<TSpecification, TOperatorContract>(Expecting.False);
+                    _validationGroups.AddToGroup<TSpecification, TContract>(Expecting.False);
                     return this;
                 }
 
-                public ContractOperator<TOperatorContract> UseThisErrorMessageIfFails(string errorMessage)
+                public IContractOperator<TContract> UseThisErrorMessageIfFails(string errorMessage)
                 {
                     _validationGroups.GetLastAddedValidator().CustomErrorMessage = errorMessage;
                     return this;
                 }
 
-                public SpecificationResult<TOperatorContract> GetResult()
+                public SpecificationResult<TContract> GetResult()
                 {
-                    foreach (ValidationGroup<TOperatorContract> validationGroup in _validationGroups)
+                    foreach (ValidationGroup<TContract> validationGroup in _validationGroups)
                     {
                         var errors = validationGroup.GetFailures(_contract);
                         _result.IsValid = !errors.Any();

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using SpecificaThor.Enums;
+using SpecificaThor.Extensions;
+using SpecificaThor.Structure;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SpecificaThor
@@ -8,68 +11,68 @@ namespace SpecificaThor
         public static EnumerableSpecification<TContract> Create<TContract>(IEnumerable<TContract> subjects)
             => new EnumerableSpecification<TContract>(subjects);
 
-        public sealed class EnumerableSpecification<TEnumerableContract>
+        public sealed class EnumerableSpecification<TContract> : IEnumerableSpecification<TContract>
         {
-            private readonly IEnumerable<TEnumerableContract> _subjects;
+            private readonly IEnumerable<TContract> _subjects;
 
-            public EnumerableSpecification(IEnumerable<TEnumerableContract> subjects)
+            internal EnumerableSpecification(IEnumerable<TContract> subjects)
                 => _subjects = subjects;
 
-            public EnumerableOperator<TEnumerableContract> ThatAre<TSpecification>() where TSpecification : ISpecification<TEnumerableContract>, new()
-                => EnumerableOperator<TEnumerableContract>.Create<TSpecification>(_subjects, Expecting.True);
+            public IEnumerableOperator<TContract> ThatAre<TSpecification>() where TSpecification : ISpecification<TContract>, new()
+                => EnumerableOperator.Create<TSpecification>(_subjects, Expecting.True);
 
-            public EnumerableOperator<TEnumerableContract> ThatAreNot<TSpecification>() where TSpecification : ISpecification<TEnumerableContract>, new()
-                => EnumerableOperator<TEnumerableContract>.Create<TSpecification>(_subjects, Expecting.False);
+            public IEnumerableOperator<TContract> ThatAreNot<TSpecification>() where TSpecification : ISpecification<TContract>, new()
+                => EnumerableOperator.Create<TSpecification>(_subjects, Expecting.False);
 
-            public sealed class EnumerableOperator<TOperatorContract>
+            public sealed class EnumerableOperator : IEnumerableOperator<TContract>
             {
-                private readonly IEnumerable<TOperatorContract> _subjects;
-                private readonly List<ValidationGroup<TOperatorContract>> _validationGroups;
+                private readonly IEnumerable<TContract> _subjects;
+                private readonly List<ValidationGroup<TContract>> _validationGroups;
 
-                private EnumerableOperator(IEnumerable<TOperatorContract> subjects)
+                private EnumerableOperator(IEnumerable<TContract> subjects)
                 {
                     _subjects = subjects;
-                    _validationGroups = new List<ValidationGroup<TOperatorContract>>();
+                    _validationGroups = new List<ValidationGroup<TContract>>();
                     _validationGroups.AddGroup();
                 }
 
-                internal static EnumerableOperator<TOperatorContract> Create<TSpecification>(IEnumerable<TOperatorContract> subjects, Expecting expecting) where TSpecification : ISpecification<TOperatorContract>, new()
+                internal static EnumerableOperator Create<TSpecification>(IEnumerable<TContract> subjects, Expecting expecting) where TSpecification : ISpecification<TContract>, new()
                 {
-                    var enumerableOperator = new EnumerableOperator<TOperatorContract>(subjects);
+                    var enumerableOperator = new EnumerableOperator(subjects);
                     enumerableOperator.AddToGroup<TSpecification>(expecting);
                     return enumerableOperator;
                 }
 
-                internal void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TOperatorContract>, new()
-                    => _validationGroups.AddToGroup<TSpecification, TOperatorContract>(expecting);
+                internal void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TContract>, new()
+                    => _validationGroups.AddToGroup<TSpecification, TContract>(expecting);
 
-                public EnumerableOperator<TOperatorContract> AndAre<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
+                public IEnumerableOperator<TContract> AndAre<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 {
                     AddToGroup<TSpecification>(Expecting.True);
                     return this;
                 }
 
-                public EnumerableOperator<TOperatorContract> OrAre<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
+                public IEnumerableOperator<TContract> OrAre<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 {
                     _validationGroups.AddGroup();
-                    _validationGroups.AddToGroup<TSpecification, TOperatorContract>(Expecting.True);
+                    _validationGroups.AddToGroup<TSpecification, TContract>(Expecting.True);
                     return this;
                 }
 
-                public EnumerableOperator<TOperatorContract> AndAreNot<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
+                public IEnumerableOperator<TContract> AndAreNot<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 {
                     AddToGroup<TSpecification>(Expecting.False);
                     return this;
                 }
 
-                public EnumerableOperator<TOperatorContract> OrAreNot<TSpecification>() where TSpecification : ISpecification<TOperatorContract>, new()
+                public IEnumerableOperator<TContract> OrAreNot<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 {
                     _validationGroups.AddGroup();
-                    _validationGroups.AddToGroup<TSpecification, TOperatorContract>(Expecting.False);
+                    _validationGroups.AddToGroup<TSpecification, TContract>(Expecting.False);
                     return this;
                 }
 
-                public IEnumerable<TOperatorContract> GetMatched()
+                public IEnumerable<TContract> GetMatched()
                     => _subjects.Where(subject => _validationGroups.Any(
                                             group => group.IsGroupValid(subject)));
             }
