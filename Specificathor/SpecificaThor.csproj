@@ -7,7 +7,7 @@
     <Authors>Erick Bressani</Authors>
     <Company />
     <PackageTags>Specification;Notification;Fluent;.NET Standard</PackageTags>
-    <Version>1.1.0</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
 </Project>
