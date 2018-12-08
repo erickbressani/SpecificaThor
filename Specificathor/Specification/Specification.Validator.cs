@@ -8,10 +8,10 @@ namespace SpecificaThor
 {
     public static partial class Specification
     {
-        public static ValidationSpecification<TContract> Create<TContract>(TContract contract)
+        public static IValidationSpecification<TContract> Create<TContract>(TContract contract)
             => new ValidationSpecification<TContract>(contract);
 
-        public sealed class ValidationSpecification<TContract> : IValidationSpecification<TContract>
+        internal sealed class ValidationSpecification<TContract> : IValidationSpecification<TContract>
         {
             private readonly TContract _contract;
 
@@ -31,7 +31,7 @@ namespace SpecificaThor
                 return contractOperator;
             }
 
-            public sealed class ContractOperator : IContractOperator<TContract>
+            internal sealed class ContractOperator : IContractOperator<TContract>
             {
                 private readonly TContract _contract;
                 private readonly SpecificationResult<TContract> _result;
@@ -80,7 +80,7 @@ namespace SpecificaThor
                     return this;
                 }
 
-                public SpecificationResult<TContract> GetResult()
+                public ISpecificationResult<TContract> GetResult()
                 {
                     foreach (ValidationGroup<TContract> validationGroup in _validationGroups)
                     {

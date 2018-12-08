@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SpecificaThor
 {
-    public class SpecificationResult<TContract>
+    internal class SpecificationResult<TContract> : ISpecificationResult<TContract>
     {
         private List<SpecificationError<TContract>> _errors;
         public bool IsValid { get; internal set; }

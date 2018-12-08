@@ -8,10 +8,10 @@ namespace SpecificaThor
 {
     public static partial class Specification
     {
-        public static EnumerableSpecification<TContract> Create<TContract>(IEnumerable<TContract> subjects)
+        public static IEnumerableSpecification<TContract> Create<TContract>(IEnumerable<TContract> subjects)
             => new EnumerableSpecification<TContract>(subjects);
 
-        public sealed class EnumerableSpecification<TContract> : IEnumerableSpecification<TContract>
+        internal sealed class EnumerableSpecification<TContract> : IEnumerableSpecification<TContract>
         {
             private readonly IEnumerable<TContract> _subjects;
 
@@ -24,7 +24,7 @@ namespace SpecificaThor
             public IEnumerableOperator<TContract> ThatAreNot<TSpecification>() where TSpecification : ISpecification<TContract>, new()
                 => EnumerableOperator.Create<TSpecification>(_subjects, Expecting.False);
 
-            public sealed class EnumerableOperator : IEnumerableOperator<TContract>
+            internal sealed class EnumerableOperator : IEnumerableOperator<TContract>
             {
                 private readonly IEnumerable<TContract> _subjects;
                 private readonly List<ValidationGroup<TContract>> _validationGroups;

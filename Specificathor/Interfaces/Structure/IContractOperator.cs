@@ -7,6 +7,6 @@
         IContractOperator<TContract> OrIsNot<TSpecification>() where TSpecification : ISpecification<TContract>, new();
         IContractOperator<TContract> AndIsNot<TSpecification>() where TSpecification : ISpecification<TContract>, new();
         IContractOperator<TContract> UseThisErrorMessageIfFails(string errorMessage);
-        SpecificationResult<TContract> GetResult();
+        ISpecificationResult<TContract> GetResult();
     }
 }
