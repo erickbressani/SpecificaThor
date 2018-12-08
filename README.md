@@ -77,7 +77,7 @@ public class AvailableOnStock : ISpecification<Lot>, IHasErrorMessageWhenExpecti
 ...
 Lot lot = ...;
 
-SpecificationResult specificationResult = Specification.Create(lot)
+ISpecificationResult specificationResult = Specification.Create(lot)
                                                        .IsNot<Expired>()
                                                        .AndIsNot<Interdicted>()
                                                        .OrIs<AvailableOnStock>()
@@ -97,7 +97,7 @@ You can set a custom message on the specification chain like this:
                  .GetResult();
 ```
 
-The method GetResult() will return the class SpecificationResult, which contains:
+The method GetResult() will return an ISpecificationResult, which contains:
  - Properties:
     - IsValid: bool 
     	- True if the validation sequence is succeeded;
