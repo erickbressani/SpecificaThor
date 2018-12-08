@@ -2,7 +2,7 @@
 .NET Standard Fluent Specification Structure combined with a Notification Pattern
 
 ## Nuget
-> Install-Package SpecificaThor -Version 1.1.0
+> Install-Package SpecificaThor -Version 2.0.0
 
 ## Usage
 
