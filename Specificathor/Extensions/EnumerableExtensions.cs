@@ -5,7 +5,7 @@ namespace SpecificaThor
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerableSpecification<TContract> GetSubjects<TContract>(this IEnumerable<TContract> source)
+        public static IEnumerableSpecification<TCandidate> GetSubjects<TCandidate>(this IEnumerable<TCandidate> source)
             => Specification.Create(source);
     }
 }

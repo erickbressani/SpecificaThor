@@ -6,16 +6,16 @@ namespace SpecificaThor.Extensions
 {
     internal static class ValidationGroupExtensions
     {
-        public static void AddGroup<TContract>(this List<ValidationGroup<TContract>> source)
-            => source.Add(new ValidationGroup<TContract>());
+        public static void AddGroup<TCandidate>(this List<ValidationGroup<TCandidate>> source)
+            => source.Add(new ValidationGroup<TCandidate>());
 
-        public static void AddToGroup<TSpecification, TContract>(this List<ValidationGroup<TContract>> source, Expecting expecting) where TSpecification : ISpecification<TContract>, new()
+        public static void AddToGroup<TSpecification, TCandidate>(this List<ValidationGroup<TCandidate>> source, Expecting expecting) where TSpecification : ISpecification<TCandidate>, new()
             => source.Last().AddToGroup<TSpecification>(expecting);
 
-        public static List<SpecificationValidatorDecorator<TContract>> GetFailures<TContract>(this List<SpecificationValidatorDecorator<TContract>> source, TContract contract)
-            => source.FindAll(validator => !validator.Validate(contract));
+        public static List<SpecificationValidatorDecorator<TCandidate>> GetFailures<TCandidate>(this List<SpecificationValidatorDecorator<TCandidate>> source, TCandidate candidate)
+            => source.FindAll(validator => !validator.Validate(candidate));
 
-        public static SpecificationValidatorDecorator<TContract> GetLastAddedValidator<TContract>(this List<ValidationGroup<TContract>> source)
+        public static SpecificationValidatorDecorator<TCandidate> GetLastAddedValidator<TCandidate>(this List<ValidationGroup<TCandidate>> source)
             => source.Last()
                      .Last();
     }

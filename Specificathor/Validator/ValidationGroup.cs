@@ -5,33 +5,31 @@ using System.Linq;
 
 namespace SpecificaThor
 {
-    internal class ValidationGroup<TContract>
+    internal class ValidationGroup<TCandidate>
     {
-        private List<SpecificationValidatorDecorator<TContract>> _validations;
+        private List<SpecificationValidatorDecorator<TCandidate>> _validations;
 
         public ValidationGroup()
-        {
-            _validations = new List<SpecificationValidatorDecorator<TContract>>();
-        }
+            => _validations = new List<SpecificationValidatorDecorator<TCandidate>>();
 
-        public void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TContract>, new()
+        public void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TCandidate>, new()
         {
-            var validator = SpecificationValidatorDecorator<TContract>.CreateWithSpecification<TSpecification>(expecting);
+            var validator = SpecificationValidatorDecorator<TCandidate>.CreateWithSpecification<TSpecification>(expecting);
             _validations.Add(validator);
         }
 
-        public bool IsGroupValid(TContract contract)
-            => _validations.TrueForAll(validator => validator.Validate(contract));
+        public bool IsGroupValid(TCandidate candidate)
+            => _validations.TrueForAll(validator => validator.Validate(candidate));
 
-        public SpecificationValidatorDecorator<TContract> Last()
+        public SpecificationValidatorDecorator<TCandidate> Last()
             => _validations.Last();
 
-        public IEnumerable<SpecificationError<TContract>> GetFailures(TContract contract)
+        public IEnumerable<SpecificationError<TCandidate>> GetFailures(TCandidate candidate)
         {
-            var failures = _validations.GetFailures(contract);
+            var failures = _validations.GetFailures(candidate);
 
-            foreach (SpecificationValidatorDecorator<TContract> validator in failures)
-                yield return validator.GetSpecificationError(contract);
+            foreach (SpecificationValidatorDecorator<TCandidate> validator in failures)
+                yield return validator.GetSpecificationError(candidate);
         }
     }
 }
