@@ -11,26 +11,26 @@
 The concrete Specification class needs to implement this interface, which will represent the domain rule that will be validated or filtered.
 
 ```
-public interface ISpecification<TContract>
+public interface ISpecification<TCandidate>
 {
-    bool Validate(TContract contract);
+    bool Validate(TCandidate candidate);
 }
 ```
 If you want to have an error message if the specification rule is expecting *true*, when using the specification chain methods: "Is()", "AndIs()", "OrIs()". Then implement this Interface to build your error message.
 
 ```
-public interface IHasErrorMessageWhenExpectingTrue<TContract>
+public interface IHasErrorMessageWhenExpectingTrue<TCandidate>
 {
-    string GetErrorMessageWhenExpectingTrue(TContract contract);
+    string GetErrorMessageWhenExpectingTrue(TCandidate candidate);
 }
 ```
 
 If you want to have an error message if the specification rule is expecting *false*, when using the specification chain methods: "IsNot()", "AndIsNot()", "OrIsNot()". Then implement this Interface to build your error message.
 
 ```
-public interface IHasErrorMessageWhenExpectingFalse<TContract>
+public interface IHasErrorMessageWhenExpectingFalse<TCandidate>
 {
-    string GetErrorMessageWhenExpectingFalse(TContract contract);
+    string GetErrorMessageWhenExpectingFalse(TCandidate candidate);
 }
 ```
 
@@ -52,23 +52,23 @@ public class Lot
 ```
 public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
 {
-    public string GetErrorMessageWhenExpectingFalse(Lot contract)
-        => $"Lot {contract.LotNumber} is expired and cannot be used";
+    public string GetErrorMessageWhenExpectingFalse(Lot candidate)
+        => $"Lot {candidate.LotNumber} is expired and cannot be used";
 
-    public bool Validate(Lot contract)
-        => contract.ExpirationDate.Date <= DateTime.Now.Date;
+    public bool Validate(Lot candidate)
+        => candidate.ExpirationDate.Date <= DateTime.Now.Date;
 }
   
 public class AvailableOnStock : ISpecification<Lot>, IHasErrorMessageWhenExpectingTrue<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
 {
-    public string GetErrorMessageWhenExpectingFalse(Lot contract)
-        => $"Lot {contract.LotNumber} is available on stock";
+    public string GetErrorMessageWhenExpectingFalse(Lot candidate)
+        => $"Lot {candidate.LotNumber} is available on stock";
 
-    public string GetErrorMessageWhenExpectingTrue(Lot contract)
-        => $"Lot {contract.LotNumber} is not available on stock. Current Quantity: {contract.AvailableQuantity}";
+    public string GetErrorMessageWhenExpectingTrue(Lot candidate)
+        => $"Lot {candidate.LotNumber} is not available on stock. Current Quantity: {candidate.AvailableQuantity}";
 
-    public bool Validate(Lot contract)
-        => contract.AvailableQuantity > 0;
+    public bool Validate(Lot candidate)
+        => candidate.AvailableQuantity > 0;
   }
 ```
 
