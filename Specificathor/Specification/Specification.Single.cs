@@ -8,14 +8,14 @@ namespace SpecificaThor
 {
     public static partial class Specification
     {
-        public static IValidationSpecification<TCandidate> Create<TCandidate>(TCandidate candidate)
-            => new ValidationSpecification<TCandidate>(candidate);
+        public static ISingleSpecification<TCandidate> Create<TCandidate>(TCandidate candidate)
+            => new SingleSpecification<TCandidate>(candidate);
 
-        internal sealed class ValidationSpecification<TCandidate> : IValidationSpecification<TCandidate>
+        internal sealed class SingleSpecification<TCandidate> : ISingleSpecification<TCandidate>
         {
             private readonly TCandidate _candidate;
 
-            internal ValidationSpecification(TCandidate candidate)
+            internal SingleSpecification(TCandidate candidate)
                 => _candidate = candidate;
 
             public ISingleOperator<TCandidate> Is<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
