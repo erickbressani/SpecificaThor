@@ -1,100 +1,80 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SpecificaThor.Enums;
+﻿using SpecificaThor.Enums;
 using SpecificaThor.Extensions;
 using SpecificaThor.Structure;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SpecificaThor
 {
     public static partial class Specification
     {
-        public static IValidationSpecification<TCandidate> Create<TCandidate>(TCandidate candidate)
-            => new ValidationSpecification<TCandidate>(candidate);
+        public static IEnumerableSpecification<TCandidate> Create<TCandidate>(IEnumerable<TCandidate> subjects)
+            => new EnumerableSpecification<TCandidate>(subjects);
 
-        internal sealed class ValidationSpecification<TCandidate> : IValidationSpecification<TCandidate>
+        internal sealed class EnumerableSpecification<TCandidate> : IEnumerableSpecification<TCandidate>
         {
-            private readonly TCandidate _candidate;
+            private readonly IEnumerable<TCandidate> _subjects;
 
-            internal ValidationSpecification(TCandidate candidate)
-                => _candidate = candidate;
+            internal EnumerableSpecification(IEnumerable<TCandidate> subjects)
+                => _subjects = subjects;
 
-            public ISingleOperator<TCandidate> Is<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
-                => CreateOperator<TSpecification>(Expecting.True);
+            public IEnumerableOperator<TCandidate> ThatAre<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
+                => EnumerableOperator.Create<TSpecification>(_subjects, Expecting.True);
 
-            public ISingleOperator<TCandidate> IsNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
-                => CreateOperator<TSpecification>(Expecting.False);
+            public IEnumerableOperator<TCandidate> ThatAreNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
+                => EnumerableOperator.Create<TSpecification>(_subjects, Expecting.False);
 
-            private ISingleOperator<TCandidate> CreateOperator<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TCandidate>, new()
+            internal sealed class EnumerableOperator : IEnumerableOperator<TCandidate>
             {
-                var candidateOperator = new SingleOperator(_candidate);
-                candidateOperator.AddToGroup<TSpecification>(expecting);
-                return candidateOperator;
-            }
-
-            internal sealed class SingleOperator : ISingleOperator<TCandidate>
-            {
-                private readonly TCandidate _candidate;
-                private readonly SpecificationResult<TCandidate> _result;
+                private readonly IEnumerable<TCandidate> _candidates;
                 private readonly List<ValidationGroup<TCandidate>> _validationGroups;
 
-                internal SingleOperator(TCandidate candidate)
+                private EnumerableOperator(IEnumerable<TCandidate> candidates)
                 {
-                    _candidate = candidate;
-                    _result = new SpecificationResult<TCandidate>();
+                    _candidates = candidates;
                     _validationGroups = new List<ValidationGroup<TCandidate>>();
                     _validationGroups.AddGroup();
+                }
+
+                internal static EnumerableOperator Create<TSpecification>(IEnumerable<TCandidate> subjects, Expecting expecting) where TSpecification : ISpecification<TCandidate>, new()
+                {
+                    var enumerableOperator = new EnumerableOperator(subjects);
+                    enumerableOperator.AddToGroup<TSpecification>(expecting);
+                    return enumerableOperator;
                 }
 
                 internal void AddToGroup<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TCandidate>, new()
                     => _validationGroups.AddToGroup<TSpecification, TCandidate>(expecting);
 
-                public ISingleOperator<TCandidate> OrIs<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
+                public IEnumerableOperator<TCandidate> AndAre<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
+                {
+                    AddToGroup<TSpecification>(Expecting.True);
+                    return this;
+                }
+
+                public IEnumerableOperator<TCandidate> OrAre<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
                 {
                     _validationGroups.AddGroup();
                     _validationGroups.AddToGroup<TSpecification, TCandidate>(Expecting.True);
                     return this;
                 }
 
-                public ISingleOperator<TCandidate> AndIs<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
+                public IEnumerableOperator<TCandidate> AndAreNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
                 {
-                    _validationGroups.AddToGroup<TSpecification, TCandidate>(Expecting.True);
+                    AddToGroup<TSpecification>(Expecting.False);
                     return this;
                 }
 
-                public ISingleOperator<TCandidate> OrIsNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
+                public IEnumerableOperator<TCandidate> OrAreNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
                 {
                     _validationGroups.AddGroup();
                     _validationGroups.AddToGroup<TSpecification, TCandidate>(Expecting.False);
                     return this;
                 }
 
-                public ISingleOperator<TCandidate> AndIsNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
-                {
-                    _validationGroups.AddToGroup<TSpecification, TCandidate>(Expecting.False);
-                    return this;
-                }
-
-                public ISingleOperator<TCandidate> UseThisErrorMessageIfFails(string errorMessage)
-                {
-                    _validationGroups.GetLastAddedValidator().CustomErrorMessage = errorMessage;
-                    return this;
-                }
-
-                public ISpecificationResult<TCandidate> GetResult()
-                {
-                    foreach (ValidationGroup<TCandidate> validationGroup in _validationGroups)
-                    {
-                        var errors = validationGroup.GetFailures(_candidate);
-                        _result.IsValid = !errors.Any();
-
-                        if (_result.IsValid)
-                            break;
-                        else
-                            _result.AddErrors(errors);
-                    }
-
-                    return _result;
-                }
+                public IEnumerable<TCandidate> GetMatched()
+                    => _candidates.Where(subject => _validationGroups.Any(
+                                            group => group.IsGroupValid(subject)));
             }
         }
     }
