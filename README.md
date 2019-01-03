@@ -73,16 +73,17 @@ public class AvailableOnStock : ISpecification<Lot>, IHasErrorMessageWhenExpecti
 ```
 
 #### Validating:
+##### Single Validation
 ```
 ...
 Lot lot = ...;
 
 ISpecificationResult specificationResult = Specification.Create(lot)
-                                                       .IsNot<Expired>()
-                                                       .AndIsNot<Interdicted>()
-                                                       .OrIs<AvailableOnStock>()
-                                                       .AndIs<Expired>()
-                                                       .GetResult();
+                                                        .IsNot<Expired>()
+                                                        .AndIsNot<Interdicted>()
+                                                        .OrIs<AvailableOnStock>()
+                                                        .AndIs<Expired>()
+                                                        .GetResult();
 ```
 It should work like that:                                                       
 *if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))*
@@ -106,10 +107,38 @@ The method GetResult() will return an ISpecificationResult, which contains:
     - TotalOfErrors: int
     	- As the name says: Total number of Errors;
  - Method:
-    - HasError\<T\>(): bool 
+    - HasError\<TSpecification\>(): bool 
     	- Returns true if the result contains an error on a specific validation;
         - Sample: result.HasError\<Expired\>()
 
+##### Enumerable Validation
+```
+ISpecificationResults<Lot> result = Specification.Create<Lot>(lots)
+					         .ThatAre<Expired>()
+					         .AndAre<Interdicted>()
+					         .AndAreNot<AvailableOnStock>()
+					         .GetResults();
+```
+The method GetResults() will return an ISpecificationResults, which contains:
+ - Properties:
+    - AreAllCandidatesValid: bool 
+    	- True if all candidates passed the validation;
+    - ErrorMessages: string
+    	- All error messages concatenated;
+    - ValidCandidates: IEnumerable\<TCandidate\>
+    	- All valid candidates;
+    - InvalidCandidates: IEnumerable\<TCandidate\>
+    	- All invalid candidates;
+     - AllCandidates: IEnumerable\<TCandidate\>
+    	- All candidates;
+ - Method:
+    - HasError\<TSpecification\>(): bool 
+    	- Returns true if the result contains an error on a specific validation;
+        - Sample: result.HasError\<Expired\>()
+    - HasError\<TSpecification\>(TCandidate candidate): bool 
+    	- Returns true if the result contains an error on a specific validation and candidate;
+        - Sample: result.HasError\<Expired\>(lot)
+ 
 #### Filtering:
 ```
 IEnumerable<Lot> = ...
@@ -130,11 +159,11 @@ Like this sample using Entity Framework:
 ```
 ...
 var result = await _dbContext.Products
-			    .Include(product => product.Lots)
-			    .GetCandidates() //This is the same as Specification.Create<Lot>(lots)
-			    .ThatAre<Expired>()
-			    .AndAre<Interdicted>()
-			    .GetMatched()
-			    .ToListAsync();
+			     .Include(product => product.Lots)
+			     .GetCandidates() //This is the same as Specification.Create<Lot>(lots)
+			     .ThatAre<Expired>()
+			     .AndAre<Interdicted>()
+			     .GetMatched()
+			     .ToListAsync();
 ```
 
