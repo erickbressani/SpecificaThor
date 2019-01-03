@@ -113,6 +113,8 @@ The method GetResult() will return an ISpecificationResult, which contains:
 
 ##### Enumerable Validation
 ```
+List<Lot> lots = ...
+
 ISpecificationResults<Lot> result = Specification.Create<Lot>(lots)
 					         .ThatAre<Expired>()
 					         .AndAre<Interdicted>()
