@@ -19,7 +19,6 @@ namespace SpecificaThor
         {
             _errors = new List<SpecificationError<TCandidate>>();
             _errorMessageBuilder = new StringBuilder();
-            IsValid = true;
         }
 
         internal static ISpecificationResult<TCandidate> Create(List<ValidationGroup<TCandidate>> validationGroups, TCandidate candidate)
@@ -45,11 +44,12 @@ namespace SpecificaThor
 
         internal void AddErrors(IEnumerable<SpecificationError<TCandidate>> errors)
         {
-            var errorToAdd = errors.Where(error => !_errors.Any(addedError => addedError.Equals(error)));
-            _errors.AddRange(errorToAdd);
+            var errorsToAdd = errors.Where(error => !_errors.Any(addedError => addedError.Equals(error)));
 
-            foreach (SpecificationError<TCandidate> error in errors)
+            foreach (SpecificationError<TCandidate> error in errorsToAdd)
                 _errorMessageBuilder.AppendMessage(error.ErrorMessage);
+
+            _errors.AddRange(errorsToAdd);
         }
     }
 }

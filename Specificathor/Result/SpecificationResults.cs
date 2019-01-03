@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpecificaThor
 {
-    [DebuggerDisplay("SpecificationResult: AreAllCandidatesValid = {AreAllCandidatesValid}")]
+    [DebuggerDisplay("SpecificationResults: AreAllCandidatesValid = {AreAllCandidatesValid}")]
     internal class SpecificationResults<TCandidate> : ISpecificationResults<TCandidate>
     {
         public string ErrorMessages => _errorMessageBuilder.ToString();
