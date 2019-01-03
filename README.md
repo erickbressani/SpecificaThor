@@ -121,6 +121,16 @@ ISpecificationResults<Lot> result = Specification.Create<Lot>(lots)
 					         .AndAreNot<AvailableOnStock>()
 					         .GetResults();
 ```
+You can set a custom message on the specification chain like this:
+```
+... Specification.Create<Lot>(lots)
+                 .ThatAreNot<Expired>()
+                 .UseThisErrorMessageIfFails("This is a custom error message") 
+		 //If the lot is expired the message above will be used
+                 .AndAreNot<Interdicted>()
+                 .GetResults();
+```
+
 The method GetResults() will return an ISpecificationResults, which contains:
  - Properties:
     - AreAllCandidatesValid: bool 
@@ -133,7 +143,7 @@ The method GetResults() will return an ISpecificationResults, which contains:
     	- All invalid candidates;
      - AllCandidates: IEnumerable\<TCandidate\>
     	- All candidates;
- - Method:
+ - Methods:
     - HasError\<TSpecification\>(): bool 
     	- Returns true if the result contains an error on a specific validation;
         - Sample: result.HasError\<Expired\>()
