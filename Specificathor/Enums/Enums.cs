@@ -2,7 +2,7 @@
 {
     internal enum Expecting
     {
-        True,
-        False
+        False,
+        True
     }
 }

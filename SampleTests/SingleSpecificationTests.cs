@@ -1,11 +1,12 @@
 using SampleImplementation;
 using SpecificaThor;
 using System;
+using System.Text;
 using Xunit;
 
 namespace SampleTests
 {
-    public class SpecificationValidationTests
+    public class SingleSpecificationTests
     {
         [Fact]
         public void AllFaling()
@@ -17,10 +18,11 @@ namespace SampleTests
                             .Build();
 
 
-            string fullErrorMessage = string.Join("\n",
-                                        new Expired().GetErrorMessageWhenExpectingFalse(lot),
-                                        new Interdicted().GetErrorMessageWhenExpectingFalse(lot),
-                                        new AvailableOnStock().GetErrorMessageWhenExpectingTrue(lot));
+            string fullErrorMessage = new StringBuilder()
+                                        .Append(new Expired().GetErrorMessageWhenExpectingFalse(lot))
+                                        .Append($"\n{new Interdicted().GetErrorMessageWhenExpectingFalse(lot)}")
+                                        .Append($"\n{new AvailableOnStock().GetErrorMessageWhenExpectingTrue(lot)}")
+                                        .ToString();
 
             var result = Specification.Create(lot)
                                       .IsNot<Expired>()
@@ -45,9 +47,10 @@ namespace SampleTests
                             .AvailableOnStock()
                             .Build();
 
-            string fullErrorMessage = string.Join("\n",
-                                        new Expired().GetErrorMessageWhenExpectingFalse(lot),
-                                        new Interdicted().GetErrorMessageWhenExpectingFalse(lot));
+            string fullErrorMessage = new StringBuilder()
+                                        .Append(new Expired().GetErrorMessageWhenExpectingFalse(lot))
+                                        .Append($"\n{new Interdicted().GetErrorMessageWhenExpectingFalse(lot)}")
+                                        .ToString();
 
             var result = Specification.Create(lot)
                                       .IsNot<Expired>()
@@ -156,7 +159,7 @@ namespace SampleTests
         }
 
         [Fact]
-        public void OrFinalGroupIsTrue()
+        public void OrLastGroupIsTrue()
         {
             var lot = new LotBuilder()
                              .Expired()

@@ -8,21 +8,21 @@ namespace SpecificaThor
 {
     public static partial class Specification
     {
-        public static IEnumerableSpecification<TCandidate> Create<TCandidate>(IEnumerable<TCandidate> subjects)
-            => new EnumerableSpecification<TCandidate>(subjects);
+        public static IEnumerableSpecification<TCandidate> Create<TCandidate>(IEnumerable<TCandidate> candidates)
+            => new EnumerableSpecification<TCandidate>(candidates);
 
         internal sealed class EnumerableSpecification<TCandidate> : IEnumerableSpecification<TCandidate>
         {
-            private readonly IEnumerable<TCandidate> _subjects;
+            private readonly IEnumerable<TCandidate> _candidates;
 
-            internal EnumerableSpecification(IEnumerable<TCandidate> subjects)
-                => _subjects = subjects;
+            internal EnumerableSpecification(IEnumerable<TCandidate> candidates)
+                => _candidates = candidates;
 
             public IEnumerableOperator<TCandidate> ThatAre<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
-                => EnumerableOperator.Create<TSpecification>(_subjects, Expecting.True);
+                => EnumerableOperator.Create<TSpecification>(_candidates, Expecting.True);
 
             public IEnumerableOperator<TCandidate> ThatAreNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new()
-                => EnumerableOperator.Create<TSpecification>(_subjects, Expecting.False);
+                => EnumerableOperator.Create<TSpecification>(_candidates, Expecting.False);
 
             internal sealed class EnumerableOperator : IEnumerableOperator<TCandidate>
             {
@@ -36,9 +36,9 @@ namespace SpecificaThor
                     _validationGroups.AddGroup();
                 }
 
-                internal static EnumerableOperator Create<TSpecification>(IEnumerable<TCandidate> subjects, Expecting expecting) where TSpecification : ISpecification<TCandidate>, new()
+                internal static EnumerableOperator Create<TSpecification>(IEnumerable<TCandidate> candidates, Expecting expecting) where TSpecification : ISpecification<TCandidate>, new()
                 {
-                    var enumerableOperator = new EnumerableOperator(subjects);
+                    var enumerableOperator = new EnumerableOperator(candidates);
                     enumerableOperator.AddToGroup<TSpecification>(expecting);
                     return enumerableOperator;
                 }
@@ -75,6 +75,19 @@ namespace SpecificaThor
                 public IEnumerable<TCandidate> GetMatched()
                     => _candidates.Where(subject => _validationGroups.Any(
                                             group => group.IsGroupValid(subject)));
+
+                public ISpecificationResults<TCandidate> GetResults()
+                {
+                    var specificationResults = new SpecificationResults<TCandidate>();
+
+                    foreach (TCandidate candidate in _candidates)
+                    {
+                        var result = SpecificationResult<TCandidate>.Create(_validationGroups, candidate);
+                        specificationResults.Add(candidate, result);
+                    }
+
+                    return specificationResults;
+                }
             }
         }
     }

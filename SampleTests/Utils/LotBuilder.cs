@@ -8,8 +8,12 @@ namespace SampleTests
         private Lot _lot;
 
         public LotBuilder()
+            => _lot = new Lot() { LotNumber = "FooBar123" };
+
+        public LotBuilder LotNumber(string lotNumber)
         {
-            _lot = new Lot() { LotNumber = "FooBar123" };
+            _lot.LotNumber = lotNumber;
+            return this;
         }
 
         public LotBuilder Expired()
@@ -49,8 +53,6 @@ namespace SampleTests
         }
 
         public Lot Build()
-        {
-            return _lot;
-        }
+            => _lot;
     }
 }

@@ -9,5 +9,6 @@ namespace SpecificaThor.Structure
         IEnumerableOperator<TCandidate> AndAreNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new();
         IEnumerableOperator<TCandidate> OrAreNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new();
         IEnumerable<TCandidate> GetMatched();
+        ISpecificationResults<TCandidate> GetResults();
     }
 }

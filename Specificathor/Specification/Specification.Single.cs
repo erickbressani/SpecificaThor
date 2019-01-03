@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using SpecificaThor.Enums;
 using SpecificaThor.Extensions;
 using SpecificaThor.Structure;
@@ -34,13 +33,11 @@ namespace SpecificaThor
             internal sealed class SingleOperator : ISingleOperator<TCandidate>
             {
                 private readonly TCandidate _candidate;
-                private readonly SpecificationResult<TCandidate> _result;
                 private readonly List<ValidationGroup<TCandidate>> _validationGroups;
 
                 internal SingleOperator(TCandidate candidate)
                 {
                     _candidate = candidate;
-                    _result = new SpecificationResult<TCandidate>();
                     _validationGroups = new List<ValidationGroup<TCandidate>>();
                     _validationGroups.AddGroup();
                 }
@@ -81,20 +78,7 @@ namespace SpecificaThor
                 }
 
                 public ISpecificationResult<TCandidate> GetResult()
-                {
-                    foreach (ValidationGroup<TCandidate> validationGroup in _validationGroups)
-                    {
-                        var errors = validationGroup.GetFailures(_candidate);
-                        _result.IsValid = !errors.Any();
-
-                        if (_result.IsValid)
-                            break;
-                        else
-                            _result.AddErrors(errors);
-                    }
-
-                    return _result;
-                }
+                    => SpecificationResult<TCandidate>.Create(_validationGroups, _candidate);
             }
         }
     }
