@@ -72,6 +72,12 @@ namespace SpecificaThor
                     return this;
                 }
 
+                public IEnumerableOperator<TCandidate> UseThisErrorMessageIfFails(string errorMessage)
+                {
+                    _validationGroups.GetLastAddedValidator().CustomErrorMessage = errorMessage;
+                    return this;
+                }
+
                 public IEnumerable<TCandidate> GetMatched()
                     => _candidates.Where(subject => _validationGroups.Any(
                                             group => group.IsGroupValid(subject)));

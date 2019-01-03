@@ -585,5 +585,65 @@ namespace SampleTests
 
             Assert.True(string.IsNullOrEmpty(result.ErrorMessages));
         }
+
+        [Fact]
+        public void NoErrorMessageWithCustomMessage()
+        {
+            var lots = new List<Lot>();
+
+            var lot1 = new LotBuilder()
+                            .NotExpired()
+                            .Build();
+
+            var lot2 = new LotBuilder()
+                            .NotExpired()
+                            .Build();
+
+            lots.Add(lot1);
+            lots.Add(lot2);
+
+            string customErrorMessage = "This is a Custom Error Message";
+            string fullErrorMessage = new StringBuilder()
+                                        .Append(customErrorMessage)
+                                        .Append($"\n{customErrorMessage}")
+                                        .ToString();
+
+            var result = Specification.Create<Lot>(lots)
+                                      .ThatAre<Expired>()
+                                      .UseThisErrorMessageIfFails(customErrorMessage)
+                                      .GetResults();
+
+            Assert.Equal(fullErrorMessage, result.ErrorMessages);
+        }
+
+        [Fact]
+        public void CustomMessage()
+        {
+            var lots = new List<Lot>();
+
+            var lot1 = new LotBuilder()
+                            .Expired()
+                            .Build();
+
+            var lot2 = new LotBuilder()
+                            .Expired()
+                            .Build();
+
+            lots.Add(lot1);
+            lots.Add(lot2);
+
+            string customErrorMessage = "This is a Custom Error Message";
+            string fullErrorMessage = new StringBuilder()
+                                        .Append(customErrorMessage)
+                                        .Append($"\n{customErrorMessage}")
+                                        .ToString();
+
+            var result = Specification.Create<Lot>(lots)
+                                      .ThatAreNot<Expired>()
+                                      .UseThisErrorMessageIfFails(customErrorMessage)
+                                      .GetResults();
+
+            Assert.Equal(fullErrorMessage, result.ErrorMessages);
+        }
     }
 }
