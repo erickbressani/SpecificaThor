@@ -76,7 +76,7 @@ public class AvailableOnStock : ISpecification<Lot>, IHasErrorMessageWhenExpecti
 ##### Single Validation
 ```
 ...
-Lot lot = ...;
+Lot lot = ...
 
 ISpecificationResult specificationResult = Specification.Create(lot)
                                                         .IsNot<Expired>()
