@@ -11,19 +11,21 @@ namespace SpecificaThor
         public bool IsValid { get; private set; }
         public string ErrorMessage => IsValid ? string.Empty : _errorMessageBuilder.ToString();
         public int TotalOfErrors => IsValid ? 0 : _errors.Count();
+        public TCandidate Candidate { get; private set; }
 
         private readonly List<SpecificationError<TCandidate>> _errors;
         private readonly StringBuilder _errorMessageBuilder;
 
-        private SpecificationResult()
+        private SpecificationResult(TCandidate candidate)
         {
+            Candidate = candidate;
             _errors = new List<SpecificationError<TCandidate>>();
             _errorMessageBuilder = new StringBuilder();
         }
 
         internal static ISpecificationResult<TCandidate> Create(List<ValidationGroup<TCandidate>> validationGroups, TCandidate candidate)
         {
-            var result = new SpecificationResult<TCandidate>();
+            var result = new SpecificationResult<TCandidate>(candidate);
 
             foreach (ValidationGroup<TCandidate> validationGroup in validationGroups)
             {

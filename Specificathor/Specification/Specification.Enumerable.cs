@@ -89,7 +89,7 @@ namespace SpecificaThor
                     foreach (TCandidate candidate in _candidates)
                     {
                         var result = SpecificationResult<TCandidate>.Create(_validationGroups, candidate);
-                        specificationResults.Add(candidate, result);
+                        specificationResults.Add(result);
                     }
 
                     return specificationResults;
