@@ -7,10 +7,11 @@
     <Authors>Erick Bressani</Authors>
     <Company />
     <PackageTags>Specification;Notification;Fluent;.NET Standard</PackageTags>
-    <Version>3.0.1</Version>
-    <AssemblyVersion>3.0.1.0</AssemblyVersion>
-    <FileVersion>3.0.1.0</FileVersion>
-    <PackageReleaseNotes>Added Enumerable Validation</PackageReleaseNotes>
+    <Version>3.1.0</Version>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
+    <FileVersion>3.1.0.0</FileVersion>
+    <PackageReleaseNotes>Added Enumerable Validation
+Added Warning Validation</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>
