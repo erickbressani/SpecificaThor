@@ -210,8 +210,7 @@ Like this sample using Entity Framework:
 
 ```
 ...
-var result = await _dbContext.Products
-			     .Include(product => product.Lots)
+var result = await _dbContext.Lots
 			     .GetCandidates() //This is the same as Specification.Create<Lot>(lots)
 			     .ThatAre<Expired>()
 			     .AndAre<Interdicted>()
