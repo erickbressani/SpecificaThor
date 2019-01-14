@@ -229,6 +229,7 @@ namespace SampleTests
             Assert.False(result.IsValid);
             Assert.True(result.TotalOfErrors == 1);
             Assert.True(result.HasError<Expired>());
+            Assert.Equal(result.ErrorMessage, string.Empty);
         }
 
         [Fact]
@@ -269,6 +270,29 @@ namespace SampleTests
             Assert.Equal(result.ErrorMessage, customErrorMessage);
             Assert.True(result.TotalOfErrors == 1);
             Assert.True(result.HasError<Expired>());
+        }
+
+        [Fact]
+        public void AsWarning()
+        {
+            var lot = new LotBuilder()
+                              .Expired()
+                              .AvailableOnStock()
+                              .Build();
+
+            string expectedWarningMessage = new Expired().GetErrorMessageWhenExpectingFalse(lot);
+
+            var result = Specification.Create(lot)
+                                      .IsNot<Expired>().AsWarning()
+                                      .AndIs<AvailableOnStock>()
+                                      .GetResult();
+
+            Assert.True(result.IsValid);
+            Assert.True(result.TotalOfErrors == 0);
+            Assert.True(result.TotalOfWarnings == 1);
+            Assert.False(result.HasError<Expired>());
+            Assert.True(result.HasWarning<Expired>());
+            Assert.Equal(result.WarningMessage, expectedWarningMessage);
         }
     }
 }

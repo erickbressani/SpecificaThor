@@ -7,6 +7,7 @@
         ISingleOperator<TCandidate> OrIsNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new();
         ISingleOperator<TCandidate> AndIsNot<TSpecification>() where TSpecification : ISpecification<TCandidate>, new();
         ISingleOperator<TCandidate> UseThisErrorMessageIfFails(string errorMessage);
+        ISingleOperator<TCandidate> AsWarning();
         ISpecificationResult<TCandidate> GetResult();
     }
 }

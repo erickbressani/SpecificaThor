@@ -1,5 +1,4 @@
-﻿using SpecificaThor.Enums;
-using SpecificaThor.Extensions;
+﻿using SpecificaThor.Extensions;
 using SpecificaThor.Structure;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +74,12 @@ namespace SpecificaThor
                 public IEnumerableOperator<TCandidate> UseThisErrorMessageIfFails(string errorMessage)
                 {
                     _validationGroups.GetLastAddedValidator().CustomErrorMessage = errorMessage;
+                    return this;
+                }
+
+                public IEnumerableOperator<TCandidate> AsWarning()
+                {
+                    _validationGroups.GetLastAddedValidator().FailureType = FailureType.Warning;
                     return this;
                 }
 

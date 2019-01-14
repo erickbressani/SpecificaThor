@@ -252,6 +252,9 @@ namespace SampleTests
             Assert.False(result.HasError<AvailableOnStock>(lot2) || result.HasError<AvailableOnStock>(lot3));
             Assert.True(result.HasError<AvailableOnStock>(lot1));
 
+            Assert.True(result.TotalOfErrors == 3);
+            Assert.True(result.TotalOfWarnings == 0);
+
             Assert.Equal(fullErrorMessages, result.ErrorMessages);
         }
 
@@ -644,6 +647,39 @@ namespace SampleTests
                                       .GetResults();
 
             Assert.Equal(fullErrorMessage, result.ErrorMessages);
+        }
+
+        [Fact]
+        public void AsWarning()
+        {
+            var lots = new List<Lot>();
+
+            var lot1 = new LotBuilder()
+                            .Expired()
+                            .AvailableOnStock()
+                            .Build();
+
+            var lot2 = new LotBuilder()
+                            .NotExpired()
+                            .AvailableOnStock()
+                            .Build();
+
+            lots.Add(lot1);
+            lots.Add(lot2);
+
+            string expectedWarningMessage = new Expired().GetErrorMessageWhenExpectingFalse(lot2);
+
+            var result = Specification.Create<Lot>(lots)
+                                      .ThatAreNot<Expired>().AsWarning()
+                                      .AndAre<AvailableOnStock>()
+                                      .GetResults();
+
+            Assert.True(result.AreAllCandidatesValid);
+            Assert.True(result.TotalOfErrors == 0);
+            Assert.True(result.TotalOfWarnings == 1);
+            Assert.False(result.HasError<Expired>());
+            Assert.True(result.HasWarning<Expired>());
+            Assert.Equal(result.WarningMessages, expectedWarningMessage);
         }
     }
 }

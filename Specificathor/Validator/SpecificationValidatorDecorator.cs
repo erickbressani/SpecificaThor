@@ -1,10 +1,9 @@
-﻿using SpecificaThor.Enums;
-
-namespace SpecificaThor
+﻿namespace SpecificaThor
 {
     internal class SpecificationValidatorDecorator<TCandidate>
     {
         public string CustomErrorMessage { get; set; }
+        public FailureType FailureType { get; set; }
 
         private Expecting _expecting;
         private ISpecification<TCandidate> _specification;
@@ -13,6 +12,7 @@ namespace SpecificaThor
         {
             _specification = specification;
             _expecting = expecting;
+            FailureType = FailureType.Error;
         }
 
         public static SpecificationValidatorDecorator<TCandidate> CreateWithSpecification<TSpecification>(Expecting expecting) where TSpecification : ISpecification<TCandidate>, new()
@@ -24,10 +24,10 @@ namespace SpecificaThor
             return _specification.Validate(candidate) == expecting;
         }
 
-        public SpecificationError<TCandidate> GetSpecificationError(TCandidate candidate)
+        public SpecificationFailure<TCandidate> GetSpecificationError(TCandidate candidate)
         {
             string errorMessage = GetErrorMessage(candidate);
-            return new SpecificationError<TCandidate>(_specification, errorMessage);
+            return new SpecificationFailure<TCandidate>(_specification, errorMessage, FailureType);
         }
 
         private string GetErrorMessage(TCandidate candidate)

@@ -1,5 +1,4 @@
-﻿using SpecificaThor.Enums;
-using SpecificaThor.Extensions;
+﻿using SpecificaThor.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,7 +23,7 @@ namespace SpecificaThor
         public SpecificationValidatorDecorator<TCandidate> Last()
             => _validations.Last();
 
-        public IEnumerable<SpecificationError<TCandidate>> GetFailures(TCandidate candidate)
+        public IEnumerable<SpecificationFailure<TCandidate>> GetFailures(TCandidate candidate)
         {
             var failures = _validations.GetFailures(candidate);
 

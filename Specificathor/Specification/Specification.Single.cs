@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SpecificaThor.Enums;
 using SpecificaThor.Extensions;
 using SpecificaThor.Structure;
 
@@ -77,8 +76,15 @@ namespace SpecificaThor
                     return this;
                 }
 
+                public ISingleOperator<TCandidate> AsWarning()
+                {
+                    _validationGroups.GetLastAddedValidator().FailureType = FailureType.Warning;
+                    return this;
+                }
+
                 public ISpecificationResult<TCandidate> GetResult()
                     => SpecificationResult<TCandidate>.Create(_validationGroups, _candidate);
+
             }
         }
     }

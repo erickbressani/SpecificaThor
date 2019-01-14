@@ -9,18 +9,24 @@ namespace SpecificaThor
     internal class SpecificationResult<TCandidate> : ISpecificationResult<TCandidate>
     {
         public bool IsValid { get; private set; }
-        public string ErrorMessage => IsValid ? string.Empty : _errorMessageBuilder.ToString();
-        public int TotalOfErrors => IsValid ? 0 : _errors.Count();
+        public string ErrorMessage => _errorMessageBuilder.ToString();
+        public string WarningMessage => _warningMessageBuilder.ToString();
+        public int TotalOfErrors => _errors.Count();
+        public int TotalOfWarnings => _warnings.Count();
         public TCandidate Candidate { get; private set; }
 
-        private readonly List<SpecificationError<TCandidate>> _errors;
+        private readonly List<SpecificationFailure<TCandidate>> _errors;
+        private readonly List<SpecificationFailure<TCandidate>> _warnings;
         private readonly StringBuilder _errorMessageBuilder;
+        private readonly StringBuilder _warningMessageBuilder;
 
         private SpecificationResult(TCandidate candidate)
         {
             Candidate = candidate;
-            _errors = new List<SpecificationError<TCandidate>>();
+            _errors = new List<SpecificationFailure<TCandidate>>();
+            _warnings = new List<SpecificationFailure<TCandidate>>();
             _errorMessageBuilder = new StringBuilder();
+            _warningMessageBuilder = new StringBuilder();
         }
 
         internal static ISpecificationResult<TCandidate> Create(List<ValidationGroup<TCandidate>> validationGroups, TCandidate candidate)
@@ -29,29 +35,50 @@ namespace SpecificaThor
 
             foreach (ValidationGroup<TCandidate> validationGroup in validationGroups)
             {
-                var errors = validationGroup.GetFailures(candidate);
-                result.IsValid = !errors.Any();
+                IEnumerable<SpecificationFailure<TCandidate>> failures = validationGroup.GetFailures(candidate);
+                result.IsValid = !failures.AnyError();
+
+                if (failures.AnyWarning())
+                    result.AddWarnings(failures.Warnings());
 
                 if (result.IsValid)
+                {
+                    result.ClearErrors();
                     break;
+                }
                 else
-                    result.AddErrors(errors);
+                    result.AddErrors(failures.Errors());
             }
 
             return result;
         }
 
         public bool HasError<TSpecification>() where TSpecification : ISpecification<TCandidate>
-            => !IsValid && _errors.Any(error => error.Is<TSpecification>());
+            => _errors.Any(error => error.Is<TSpecification>());
 
-        internal void AddErrors(IEnumerable<SpecificationError<TCandidate>> errors)
+        public bool HasWarning<TSpecification>() where TSpecification : ISpecification<TCandidate>
+            => _warnings.Any(warning => warning.Is<TSpecification>());
+
+        internal void ClearErrors()
+            => _errors.Clear();
+
+        internal void AddErrors(IEnumerable<SpecificationFailure<TCandidate>> errors)
+            => AddFailure(errors, FailureType.Error);
+
+        internal void AddWarnings(IEnumerable<SpecificationFailure<TCandidate>> errors)
+            => AddFailure(errors, FailureType.Warning);
+
+        internal void AddFailure(IEnumerable<SpecificationFailure<TCandidate>> failures, FailureType failureType)
         {
-            var errorsToAdd = errors.Where(error => !_errors.Any(addedError => addedError.Equals(error)));
+            StringBuilder messageBuilder = failureType == FailureType.Error ? _errorMessageBuilder : _warningMessageBuilder;
+            List<SpecificationFailure<TCandidate>> addedFailures = failureType == FailureType.Error ? _errors : _warnings;
 
-            foreach (SpecificationError<TCandidate> error in errorsToAdd)
-                _errorMessageBuilder.AppendMessage(error.ErrorMessage);
+            var failuresToAdd = failures.Where(failure => !addedFailures.Any(addedFailure => addedFailure.Equals(failure)));
 
-            _errors.AddRange(errorsToAdd);
+            foreach (SpecificationFailure<TCandidate> failure in failuresToAdd)
+                messageBuilder.AppendMessage(failure.ValidationMessage);
+
+            addedFailures.AddRange(failuresToAdd);
         }
     }
 }

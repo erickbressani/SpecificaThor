@@ -2,15 +2,18 @@
 
 namespace SpecificaThor
 {
-    internal class SpecificationError<TCandidate>
+    internal class SpecificationFailure<TCandidate>
     {
-        private ISpecification<TCandidate> _specification;
-        public string ErrorMessage { get; private set; }
+        public string ValidationMessage { get; private set; }
+        public FailureType FailureType { get; private set; }
 
-        public SpecificationError(ISpecification<TCandidate> specificationType, string errorMessage)
+        private ISpecification<TCandidate> _specification;
+
+        internal SpecificationFailure(ISpecification<TCandidate> specificationType, string validationMessage, FailureType failureType)
         {
+            ValidationMessage = validationMessage;
+            FailureType = failureType;
             _specification = specificationType;
-            ErrorMessage = errorMessage;
         }
 
         public bool Is<TSpecification>() where TSpecification : ISpecification<TCandidate>
@@ -20,7 +23,7 @@ namespace SpecificaThor
             => _specification.GetType();
 
         public override bool Equals(object obj)
-            => GetSpecificationType() == (obj as SpecificationError<TCandidate>).GetSpecificationType();
+            => GetSpecificationType() == (obj as SpecificationFailure<TCandidate>).GetSpecificationType();
 
         public override int GetHashCode()
             => base.GetHashCode();
