@@ -88,28 +88,25 @@ ISpecificationResult specificationResult = Specification.Create(lot)
 It should work like that:                                                       
 *if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))*
 
-You can set a custom message on the specification chain like this:
-```
-... Specification.Create(lot)
-                 .IsNot<Expired>()
-                 .UseThisErrorMessageIfFails("This is a custom error message") 
-		 //If the lot is expired the message above will be used
-                 .AndIsNot<Interdicted>()
-                 .GetResult();
-```
-
 The method GetResult() will return an ISpecificationResult, which contains:
  - Properties:
     - IsValid: bool 
     	- True if the validation sequence is succeeded;
     - ErrorMessage: string
     	- All error messages concatenated;
+    - WarningMessage: string
+    	- All error messages concatenated;
     - TotalOfErrors: int
     	- As the name says: Total number of Errors;
+    - TotalOfWarnings: int
+    	- As the name says: Total number of Warnings;
  - Method:
     - HasError\<TSpecification\>(): bool 
     	- Returns true if the result contains an error on a specific validation;
         - Sample: result.HasError\<Expired\>()
+    - HasWarning\<TSpecification\>(): bool 
+    	- Returns true if the result contains an warning on a specific validation;
+        - Sample: result.HasWarning\<Expired\>()
 
 ##### Enumerable Validation
 ```
@@ -120,15 +117,6 @@ ISpecificationResults<Lot> result = Specification.Create<Lot>(lots)
 					         .AndAre<Interdicted>()
 					         .AndAreNot<AvailableOnStock>()
 					         .GetResults();
-```
-You can set a custom message on the specification chain like this:
-```
-... Specification.Create<Lot>(lots)
-                 .ThatAreNot<Expired>()
-                 .UseThisErrorMessageIfFails("This is a custom error message") 
-		 //If the lot is expired the message above will be used
-                 .AndAreNot<Interdicted>()
-                 .GetResults();
 ```
 
 The method GetResults() will return an ISpecificationResults, which contains:
@@ -141,8 +129,12 @@ The method GetResults() will return an ISpecificationResults, which contains:
     	- All valid candidates;
     - InvalidCandidates: IEnumerable\<TCandidate\>
     	- All invalid candidates;
-     - AllCandidates: IEnumerable\<TCandidate\>
+    - AllCandidates: IEnumerable\<TCandidate\>
     	- All candidates;
+    - TotalOfErrors: int
+    	- As the name says: Total number of Errors;
+    - TotalOfWarnings: int
+    	- As the name says: Total number of Warnings;
  - Methods:
     - HasError\<TSpecification\>(): bool 
     	- Returns true if the result contains an error on a specific validation;
@@ -150,7 +142,55 @@ The method GetResults() will return an ISpecificationResults, which contains:
     - HasError\<TSpecification\>(TCandidate candidate): bool 
     	- Returns true if the result contains an error on a specific validation and candidate;
         - Sample: result.HasError\<Expired\>(lot)
- 
+    - HasWarning\<TSpecification\>(): bool 
+    	- Returns true if the result contains an warning on a specific validation;
+        - Sample: result.HasWarning\<Expired\>()
+    - HasWarning\<TSpecification\>(TCandidate candidate): bool 
+    	- Returns true if the result contains an warning on a specific validation and candidate;
+        - Sample: result.HasWarning\<Expired\>(lot)
+
+##### Additional Features
+
+You can set a custom message on the single or enumerable specification chain like this:
+```
+... Specification.Create(lot)
+                 .IsNot<Expired>()
+                 .UseThisErrorMessageIfFails("This is a custom error message") 
+		 //If the lot is expired the message above will be used
+                 .AndIsNot<Interdicted>()
+                 .GetResult();
+```
+
+You can set a validation to Warning Level calling the method AsWarning() after the desired specification validation.
+It will not fail the Specific Validation, but if the result is not what you expect it will save on WarningMessage.
+Supported on Single or Enumerable Specification.
+
+```
+//lot is expired and is available on stock
+... Specification.Create(lot)
+	         .IsNot<Expired>().AsWarning()
+	         .AndIs<AvailableOnStock>()
+	         .GetResult();
+		 
+Assert.True(result.IsValid);
+Assert.True(result.TotalOfErrors == 0);
+Assert.True(result.TotalOfWarnings == 1);
+Assert.False(result.HasError<Expired>());
+Assert.True(result.HasWarning<Expired>());
+Assert.Equal(result.WarningMessage, "Lot lot123 is expired");	 
+Assert.Equal(result.ErrorMessage, string.Empty);
+
+...
+
+//lot is expired and is NOT available on stock
+... Specification.Create(lot)
+	         .IsNot<Expired>().AsWarning()
+	         .AndIs<AvailableOnStock>()
+	         .GetResult();
+		 
+Assert.False(result.IsValid); //It will fail because AvailableOnStock is not on WarningLevel as the Expired validation
+```
+
 #### Filtering:
 ```
 IEnumerable<Lot> = ...
