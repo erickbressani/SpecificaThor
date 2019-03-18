@@ -78,12 +78,13 @@ public class AvailableOnStock : ISpecification<Lot>, IHasErrorMessageWhenExpecti
 ...
 Lot lot = ...
 
-ISpecificationResult specificationResult = Specification.Create(lot)
-                                                        .IsNot<Expired>()
-                                                        .AndIsNot<Interdicted>()
-                                                        .OrIs<AvailableOnStock>()
-                                                        .AndIs<Expired>()
-                                                        .GetResult();
+ISpecificationResult specificationResult = Specification
+	.Create(lot)
+	.IsNot<Expired>()
+	.AndIsNot<Interdicted>()
+	.OrIs<AvailableOnStock>()
+	.AndIs<Expired>()
+	.GetResult();
 ```
 It should work like that:                                                       
 *if ((!lot.Expired && !lot.Interdicted) || (lot.AvailableOnStock && lot.Expired))*
@@ -112,11 +113,12 @@ The method GetResult() will return an ISpecificationResult, which contains:
 ```
 IEnumerable<Lot> lots = ...
 
-ISpecificationResults<Lot> result = Specification.Create<Lot>(lots)
-					         .ThatAre<Expired>()
-					         .AndAre<Interdicted>()
-					         .AndAreNot<AvailableOnStock>()
-					         .GetResults();
+ISpecificationResults<Lot> result = Specification
+	.Create<Lot>(lots)
+ 	.ThatAre<Expired>()
+ 	.AndAre<Interdicted>()
+ 	.AndAreNot<AvailableOnStock>()
+ 	.GetResults();
 ```
 
 The method GetResults() will return an ISpecificationResults, which contains:
@@ -153,12 +155,13 @@ The method GetResults() will return an ISpecificationResults, which contains:
 
 You can set a custom message on the single or enumerable specification chain like this:
 ```
-... Specification.Create(lot)
-                 .IsNot<Expired>()
-                 .UseThisErrorMessageIfFails("This is a custom error message") 
-		 //If the lot is expired the message above will be used
-                 .AndIsNot<Interdicted>()
-                 .GetResult();
+... Specification
+	.Create(lot)
+ 	.IsNot<Expired>()
+ 	.UseThisErrorMessageIfFails("This is a custom error message") 
+ 	//If the lot is expired the message above will be used
+ 	.AndIsNot<Interdicted>()
+ 	.GetResult();
 ```
 
 You can set a validation to Warning Level calling the method AsWarning() after the desired specification validation.
@@ -167,14 +170,15 @@ Supported on Single or Enumerable Specification.
 
 ```
 //lot is expired and is available on stock
-... Specification.Create(lot)
-	         .IsNot<Expired>().AsWarning()
-	         .AndIs<AvailableOnStock>()
-	         .GetResult();
+... Specification
+	.Create(lot)
+ 	.IsNot<Expired>().AsWarning()
+ 	.AndIs<AvailableOnStock>()
+ 	.GetResult();
 		 
 Assert.True(result.IsValid);
-Assert.True(result.TotalOfErrors == 0);
-Assert.True(result.TotalOfWarnings == 1);
+Assert.Equal(0, result.TotalOfErrors);
+Assert.Equal(1, result.TotalOfWarnings);
 Assert.False(result.HasError<Expired>());
 Assert.True(result.HasWarning<Expired>());
 Assert.Equal(result.WarningMessage, "Lot lot123 is expired");	 
@@ -183,10 +187,11 @@ Assert.Equal(result.ErrorMessage, string.Empty);
 ...
 
 //lot is expired and is NOT available on stock
-... Specification.Create(lot)
-	         .IsNot<Expired>().AsWarning()
-	         .AndIs<AvailableOnStock>()
-	         .GetResult();
+... Specification
+	.Create(lot)
+ 	.IsNot<Expired>().AsWarning()
+ 	.AndIs<AvailableOnStock>()
+ 	.GetResult();
 		 
 Assert.False(result.IsValid); //It will fail because AvailableOnStock is not on WarningLevel as the Expired validation
 ```
@@ -195,11 +200,12 @@ Assert.False(result.IsValid); //It will fail because AvailableOnStock is not on 
 ```
 IEnumerable<Lot> = ...
 ...
-IEnumerable<Lot> result = Specification.Create<Lot>(lots)
-                                       .ThatAre<Expired>()
-                                       .AndAre<Interdicted>()
-                                       .OrAre<AvailableOnStock>()
-                                       .GetMatched();
+IEnumerable<Lot> result = Specification
+	.Create<Lot>(lots)
+       	.ThatAre<Expired>()
+       	.AndAre<Interdicted>()
+       	.OrAre<AvailableOnStock>()
+       	.GetMatched();
 ```
 It should work like that:         
 *lots.Where(lot => (lot.Expired && lot.Interdicted) || (lot.AvailableOnStock))*
@@ -210,11 +216,12 @@ Like this sample using Entity Framework:
 
 ```
 ...
-var result = await _dbContext.Lots
-			     .GetCandidates() //This is the same as Specification.Create<Lot>(lots)
-			     .ThatAre<Expired>()
-			     .AndAre<Interdicted>()
-			     .GetMatched()
-			     .ToListAsync();
+var result = await _dbContext
+	.Lots
+     	.GetCandidates() //This is the same as Specification.Create<Lot>(lots)
+     	.ThatAre<Expired>()
+     	.AndAre<Interdicted>()
+     	.GetMatched()
+     	.ToListAsync();
 ```
 
