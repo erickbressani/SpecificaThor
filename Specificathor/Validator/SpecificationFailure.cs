@@ -4,10 +4,10 @@ namespace SpecificaThor
 {
     internal class SpecificationFailure<TCandidate>
     {
-        public string ValidationMessage { get; private set; }
-        public FailureType FailureType { get; private set; }
+        public string ValidationMessage { get; }
+        public FailureType FailureType { get; }
 
-        private ISpecification<TCandidate> _specification;
+        private readonly ISpecification<TCandidate> _specification;
 
         internal SpecificationFailure(ISpecification<TCandidate> specificationType, string validationMessage, FailureType failureType)
         {
@@ -23,9 +23,9 @@ namespace SpecificaThor
             => _specification.GetType();
 
         public override bool Equals(object obj)
-            => GetSpecificationType() == (obj as SpecificationFailure<TCandidate>).GetSpecificationType();
+            => GetSpecificationType() == (obj as SpecificationFailure<TCandidate>)?.GetSpecificationType();
 
         public override int GetHashCode()
-            => base.GetHashCode();
+            => _specification.GetHashCode();
     }
 }

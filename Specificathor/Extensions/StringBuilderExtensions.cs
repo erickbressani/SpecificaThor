@@ -11,7 +11,7 @@ namespace SpecificaThor
                 if (source.Length == 0)
                     source.Append(message);
                 else
-                    source.Append($"\n{message}");
+                    source.Append("\n").Append(message);
             }
 
             return source;

@@ -1,11 +1,11 @@
 ﻿using SampleImplementation;
 using System;
 
-namespace SampleTests
+namespace Tests
 {
     public class LotBuilder
     {
-        private Lot _lot;
+        private readonly Lot _lot;
 
         public LotBuilder()
             => _lot = new Lot() { LotNumber = "FooBar123" };

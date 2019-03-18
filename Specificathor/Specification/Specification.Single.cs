@@ -84,7 +84,6 @@ namespace SpecificaThor
 
                 public ISpecificationResult<TCandidate> GetResult()
                     => SpecificationResult<TCandidate>.Create(_validationGroups, _candidate);
-
             }
         }
     }

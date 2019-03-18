@@ -6,7 +6,7 @@ namespace SpecificaThor
 {
     internal class ValidationGroup<TCandidate>
     {
-        private List<SpecificationValidatorDecorator<TCandidate>> _validations;
+        private readonly List<SpecificationValidatorDecorator<TCandidate>> _validations;
 
         public ValidationGroup()
             => _validations = new List<SpecificationValidatorDecorator<TCandidate>>();

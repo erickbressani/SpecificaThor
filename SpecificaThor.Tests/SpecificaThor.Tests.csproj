@@ -13,7 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SampleImplementation\SampleImplementation.csproj" />
+    <ProjectReference Include="..\SpecificaThor.SampleImplementation\SpecificaThor.SampleImplementation.csproj" />
+    <ProjectReference Include="..\Specificathor\SpecificaThor.csproj" />
   </ItemGroup>
 
 </Project>

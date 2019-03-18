@@ -4,7 +4,7 @@ using System;
 using System.Text;
 using Xunit;
 
-namespace SampleTests
+namespace Tests
 {
     public class SingleSpecificationTests
     {
@@ -17,11 +17,12 @@ namespace SampleTests
                             .NotAvailableOnStock()
                             .Build();
 
-
             string fullErrorMessage = new StringBuilder()
                                         .Append(new Expired().GetErrorMessageWhenExpectingFalse(lot))
-                                        .Append($"\n{new Interdicted().GetErrorMessageWhenExpectingFalse(lot)}")
-                                        .Append($"\n{new AvailableOnStock().GetErrorMessageWhenExpectingTrue(lot)}")
+                                        .Append("\n")
+                                        .Append(new Interdicted().GetErrorMessageWhenExpectingFalse(lot))
+                                        .Append("\n")
+                                        .Append(new AvailableOnStock().GetErrorMessageWhenExpectingTrue(lot))
                                         .ToString();
 
             var result = Specification.Create(lot)
@@ -49,7 +50,8 @@ namespace SampleTests
 
             string fullErrorMessage = new StringBuilder()
                                         .Append(new Expired().GetErrorMessageWhenExpectingFalse(lot))
-                                        .Append($"\n{new Interdicted().GetErrorMessageWhenExpectingFalse(lot)}")
+                                        .Append("\n")
+                                        .Append(new Interdicted().GetErrorMessageWhenExpectingFalse(lot))
                                         .ToString();
 
             var result = Specification.Create(lot)
@@ -206,7 +208,6 @@ namespace SampleTests
                                       .AndIs<AvailableOnStock>()
                                       .AndIsNot<Interdicted>()
                                       .GetResult();
-
 
             Assert.False(result.IsValid);
             Assert.True(result.TotalOfErrors == 3);

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace SampleTests
+namespace Tests
 {
     public class EnumerableSpecificationTests
     {
@@ -153,7 +153,7 @@ namespace SampleTests
                                                    .AndAre<AvailableOnStock>()
                                                    .GetMatched();
 
-            Assert.True(result.Count() == 0);
+            Assert.True(!result.Any());
         }
 
         [Fact]
@@ -224,7 +224,8 @@ namespace SampleTests
 
             string fullErrorMessages = new StringBuilder()
                                         .Append(new AvailableOnStock().GetErrorMessageWhenExpectingFalse(lot1))
-                                        .Append($"\n{new Interdicted().GetErrorMessageWhenExpectingTrue(lot2)}")
+                                        .Append("\n")
+                                        .Append(new Interdicted().GetErrorMessageWhenExpectingTrue(lot2))
                                         .ToString();
 
             ISpecificationResults<Lot> result = Specification.Create<Lot>(lots)
@@ -605,10 +606,11 @@ namespace SampleTests
             lots.Add(lot1);
             lots.Add(lot2);
 
-            string customErrorMessage = "This is a Custom Error Message";
+            const string customErrorMessage = "This is a Custom Error Message";
             string fullErrorMessage = new StringBuilder()
                                         .Append(customErrorMessage)
-                                        .Append($"\n{customErrorMessage}")
+                                        .Append("\n")
+                                        .Append(customErrorMessage)
                                         .ToString();
 
             var result = Specification.Create<Lot>(lots)
@@ -635,10 +637,11 @@ namespace SampleTests
             lots.Add(lot1);
             lots.Add(lot2);
 
-            string customErrorMessage = "This is a Custom Error Message";
+            const string customErrorMessage = "This is a Custom Error Message";
             string fullErrorMessage = new StringBuilder()
                                         .Append(customErrorMessage)
-                                        .Append($"\n{customErrorMessage}")
+                                        .Append("\n")
+                                        .Append(customErrorMessage)
                                         .ToString();
 
             var result = Specification.Create<Lot>(lots)

@@ -6,14 +6,14 @@ using System.Text;
 namespace SpecificaThor
 {
     [DebuggerDisplay("SpecificationResult: IsValid = {IsValid}")]
-    internal class SpecificationResult<TCandidate> : ISpecificationResult<TCandidate>
+    internal sealed class SpecificationResult<TCandidate> : ISpecificationResult<TCandidate>
     {
         public bool IsValid { get; private set; }
         public string ErrorMessage => _errorMessageBuilder.ToString();
         public string WarningMessage => _warningMessageBuilder.ToString();
-        public int TotalOfErrors => _errors.Count();
-        public int TotalOfWarnings => _warnings.Count();
-        public TCandidate Candidate { get; private set; }
+        public int TotalOfErrors => _errors.Count;
+        public int TotalOfWarnings => _warnings.Count;
+        public TCandidate Candidate { get; }
 
         private readonly List<SpecificationFailure<TCandidate>> _errors;
         private readonly List<SpecificationFailure<TCandidate>> _warnings;
@@ -47,7 +47,9 @@ namespace SpecificaThor
                     break;
                 }
                 else
+                {
                     result.AddErrors(failures.Errors());
+                }
             }
 
             return result;

@@ -15,7 +15,6 @@ namespace SpecificaThor.Extensions
             => source.FindAll(validator => !validator.Validate(candidate));
 
         public static SpecificationValidatorDecorator<TCandidate> GetLastAddedValidator<TCandidate>(this List<ValidationGroup<TCandidate>> source)
-            => source.Last()
-                     .Last();
+            => source.Last().Last();
     }
 }

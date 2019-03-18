@@ -1,12 +1,12 @@
 ﻿namespace SpecificaThor
 {
-    internal class SpecificationValidatorDecorator<TCandidate>
+    internal sealed class SpecificationValidatorDecorator<TCandidate>
     {
         public string CustomErrorMessage { get; set; }
         public FailureType FailureType { get; set; }
 
-        private Expecting _expecting;
-        private ISpecification<TCandidate> _specification;
+        private readonly Expecting _expecting;
+        private readonly ISpecification<TCandidate> _specification;
 
         private SpecificationValidatorDecorator(ISpecification<TCandidate> specification, Expecting expecting)
         {

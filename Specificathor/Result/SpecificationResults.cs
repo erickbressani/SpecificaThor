@@ -42,7 +42,7 @@ namespace SpecificaThor
 
         public bool HasError<TSpecification>(TCandidate candidate) where TSpecification : ISpecification<TCandidate>
         {
-            var result = _resultsPerCandidate.FirstOrDefault(resultPerCandidate => resultPerCandidate.Candidate.Equals(candidate));
+            var result = _resultsPerCandidate.Find(resultPerCandidate => resultPerCandidate.Candidate.Equals(candidate));
 
             if (result == null)
                 return false;
@@ -52,7 +52,7 @@ namespace SpecificaThor
 
         public bool HasWarning<TSpecification>(TCandidate candidate) where TSpecification : ISpecification<TCandidate>
         {
-            var result = _resultsPerCandidate.FirstOrDefault(resultPerCandidate => resultPerCandidate.Candidate.Equals(candidate));
+            var result = _resultsPerCandidate.Find(resultPerCandidate => resultPerCandidate.Candidate.Equals(candidate));
 
             if (result == null)
                 return false;
@@ -63,7 +63,9 @@ namespace SpecificaThor
         internal void Add(ISpecificationResult<TCandidate> result)
         {
             if (result.IsValid)
+            {
                 _validCandidates.Add(result.Candidate);
+            }
             else
             {
                 _invalidCandidates.Add(result.Candidate);
