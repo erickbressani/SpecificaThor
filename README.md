@@ -10,7 +10,7 @@
 
 The concrete Specification class needs to implement this interface, which will represent the domain rule that will be validated or filtered.
 
-```
+```csharp
 public interface ISpecification<TCandidate>
 {
     bool Validate(TCandidate candidate);
@@ -18,7 +18,7 @@ public interface ISpecification<TCandidate>
 ```
 If you want to have an error message if the specification rule is expecting *true*, when using the specification chain methods: "Is()", "AndIs()", "OrIs()". Then implement this Interface to build your error message.
 
-```
+```csharp
 public interface IHasErrorMessageWhenExpectingTrue<TCandidate>
 {
     string GetErrorMessageWhenExpectingTrue(TCandidate candidate);
@@ -27,7 +27,7 @@ public interface IHasErrorMessageWhenExpectingTrue<TCandidate>
 
 If you want to have an error message if the specification rule is expecting *false*, when using the specification chain methods: "IsNot()", "AndIsNot()", "OrIsNot()". Then implement this Interface to build your error message.
 
-```
+```csharp
 public interface IHasErrorMessageWhenExpectingFalse<TCandidate>
 {
     string GetErrorMessageWhenExpectingFalse(TCandidate candidate);
@@ -37,7 +37,7 @@ public interface IHasErrorMessageWhenExpectingFalse<TCandidate>
 ### Sample
 
 #### Dummy entity/poco class:
-```
+```csharp
 public class Lot
 {
     public long Id { get; set; }
@@ -49,7 +49,7 @@ public class Lot
 ```
 
 #### Concrete Specification Classes: 
-```
+```csharp
 public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
 {
     public string GetErrorMessageWhenExpectingFalse(Lot candidate)
@@ -74,7 +74,7 @@ public class AvailableOnStock : ISpecification<Lot>, IHasErrorMessageWhenExpecti
 
 #### Validating:
 ##### Single Validation
-```
+```csharp
 ...
 Lot lot = ...
 
@@ -110,7 +110,7 @@ The method GetResult() will return an ISpecificationResult, which contains:
         - Sample: result.HasWarning\<Expired\>()
 
 ##### Enumerable Validation
-```
+```csharp
 IEnumerable<Lot> lots = ...
 
 ISpecificationResults<Lot> result = Specification
@@ -154,7 +154,7 @@ The method GetResults() will return an ISpecificationResults, which contains:
 ##### Additional Features
 
 You can set a custom message on the single or enumerable specification chain like this:
-```
+```csharp
 ... Specification
 	.Create(lot)
  	.IsNot<Expired>()
@@ -168,7 +168,7 @@ You can set a validation to Warning Level calling the method AsWarning() after t
 It will not fail the Specific Validation, but if the result is not what you expect it will save on WarningMessage.
 Supported on Single or Enumerable Specification.
 
-```
+```csharp
 //lot is expired and is available on stock
 ... Specification
 	.Create(lot)
