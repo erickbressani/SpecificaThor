@@ -197,7 +197,7 @@ Assert.False(result.IsValid); //It will fail because AvailableOnStock is not on 
 ```
 
 #### Filtering:
-```
+```csharp
 IEnumerable<Lot> = ...
 ...
 IEnumerable<Lot> result = Specification
@@ -214,7 +214,7 @@ It also contains an IEnumerable extension method GetCandidates() that creates a 
 
 Like this sample using Entity Framework:
 
-```
+```csharp
 ...
 var result = await _dbContext
 	.Lots
