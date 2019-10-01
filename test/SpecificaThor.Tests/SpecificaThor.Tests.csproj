@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Specificathor\SpecificaThor.csproj" />
+    <ProjectReference Include="..\..\src\Specificathor\SpecificaThor.csproj" />
   </ItemGroup>
 
 </Project>

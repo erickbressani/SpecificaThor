@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecificaThor", "Specificathor\SpecificaThor.csproj", "{AC338EEA-F639-4851-A036-6FBA9FE9F2C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecificaThor", "src\Specificathor\SpecificaThor.csproj", "{AC338EEA-F639-4851-A036-6FBA9FE9F2C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecificaThor.Tests", "SpecificaThor.Tests\SpecificaThor.Tests.csproj", "{347DDBA1-E1FC-4D4B-A7CB-DFBE3DE08F48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecificaThor.Tests", "test\SpecificaThor.Tests\SpecificaThor.Tests.csproj", "{347DDBA1-E1FC-4D4B-A7CB-DFBE3DE08F48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
