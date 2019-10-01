@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecificaThor", "src\Specif
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecificaThor.Tests", "test\SpecificaThor.Tests\SpecificaThor.Tests.csproj", "{347DDBA1-E1FC-4D4B-A7CB-DFBE3DE08F48}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{22EC20F2-D392-42E5-A00F-D48676C21DDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{347DDBA1-E1FC-4D4B-A7CB-DFBE3DE08F48} = {22EC20F2-D392-42E5-A00F-D48676C21DDE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {27AE2CA8-AE69-4AA7-8FB2-BCEB19F7BDE7}
