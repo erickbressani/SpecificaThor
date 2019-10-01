@@ -18,10 +18,8 @@ namespace SpecificaThor.Tests
                 .Build();
 
             string fullErrorMessage = new StringBuilder()
-                .Append(new Expired().GetErrorMessageWhenExpectingFalse(lot))
-                .Append("\n")
-                .Append(new Interdicted().GetErrorMessageWhenExpectingFalse(lot))
-                .Append("\n")
+                .AppendLine(new Expired().GetErrorMessageWhenExpectingFalse(lot))
+                .AppendLine(new Interdicted().GetErrorMessageWhenExpectingFalse(lot))
                 .Append(new AvailableOnStock().GetErrorMessageWhenExpectingTrue(lot))
                 .ToString();
 
@@ -50,8 +48,7 @@ namespace SpecificaThor.Tests
                 .Build();
 
             string fullErrorMessage = new StringBuilder()
-                .Append(new Expired().GetErrorMessageWhenExpectingFalse(lot))
-                .Append("\n")
+                .AppendLine(new Expired().GetErrorMessageWhenExpectingFalse(lot))
                 .Append(new Interdicted().GetErrorMessageWhenExpectingFalse(lot))
                 .ToString();
 

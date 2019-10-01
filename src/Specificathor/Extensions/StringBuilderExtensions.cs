@@ -8,10 +8,10 @@ namespace SpecificaThor
         {
             if (!string.IsNullOrEmpty(message))
             {
-                if (source.Length == 0)
-                    source.Append(message);
-                else
-                    source.Append("\n").Append(message);
+                if (source.Length > 0)
+                    source.AppendLine();
+
+                source.Append(message);
             }
 
             return source;

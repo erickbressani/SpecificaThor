@@ -234,8 +234,7 @@ namespace SpecificaThor.Tests
             lots.Add(lot3);
 
             string fullErrorMessages = new StringBuilder()
-                .Append(new AvailableOnStock().GetErrorMessageWhenExpectingFalse(lot1))
-                .Append("\n")
+                .AppendLine(new AvailableOnStock().GetErrorMessageWhenExpectingFalse(lot1))
                 .Append(new Interdicted().GetErrorMessageWhenExpectingTrue(lot2))
                 .ToString();
 
@@ -631,8 +630,7 @@ namespace SpecificaThor.Tests
 
             const string customErrorMessage = "This is a Custom Error Message";
             string fullErrorMessage = new StringBuilder()
-                .Append(customErrorMessage)
-                .Append("\n")
+                .AppendLine(customErrorMessage)
                 .Append(customErrorMessage)
                 .ToString();
 
@@ -663,8 +661,7 @@ namespace SpecificaThor.Tests
 
             const string customErrorMessage = "This is a Custom Error Message";
             string fullErrorMessage = new StringBuilder()
-                .Append(customErrorMessage)
-                .Append("\n")
+                .AppendLine(customErrorMessage)
                 .Append(customErrorMessage)
                 .ToString();
 
