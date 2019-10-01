@@ -1,10 +1,10 @@
-using SampleImplementation;
+using SpecificaThor.Tests.Sample;
 using SpecificaThor;
 using System;
 using System.Text;
 using Xunit;
 
-namespace Tests
+namespace SpecificaThor.Tests
 {
     public class SingleSpecificationTests
     {

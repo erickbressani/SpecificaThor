@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SampleImplementation
+namespace SpecificaThor.Tests.Sample
 {
     public class Lot
     {

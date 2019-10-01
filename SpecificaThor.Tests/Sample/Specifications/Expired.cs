@@ -1,7 +1,7 @@
 ﻿using SpecificaThor;
 using System;
 
-namespace SampleImplementation
+namespace SpecificaThor.Tests.Sample
 {
     public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
     {

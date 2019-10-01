@@ -1,7 +1,6 @@
-﻿using SampleImplementation;
-using System;
+﻿using System;
 
-namespace Tests
+namespace SpecificaThor.Tests.Sample
 {
     public class LotBuilder
     {

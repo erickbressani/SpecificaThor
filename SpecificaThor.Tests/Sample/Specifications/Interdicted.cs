@@ -1,6 +1,6 @@
 ﻿using SpecificaThor;
 
-namespace SampleImplementation
+namespace SpecificaThor.Tests.Sample
 {
     public class Interdicted : ISpecification<Lot>, IHasErrorMessageWhenExpectingTrue<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
     {
