@@ -1,12 +1,13 @@
-using SpecificaThor.Tests.Sample;
-using SpecificaThor;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using SpecificaThor.Tests.Sample;
 using Xunit;
 
 namespace SpecificaThor.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class EnumerableSpecificationTests
     {
         [Fact]
@@ -234,7 +235,6 @@ namespace SpecificaThor.Tests
             lots.Add(lot3);
 
             string fullErrorMessages = new StringBuilder()
-                .AppendLine(new AvailableOnStock().GetErrorMessageWhenExpectingFalse(lot1))
                 .Append(new Interdicted().GetErrorMessageWhenExpectingTrue(lot2))
                 .ToString();
 
@@ -705,7 +705,72 @@ namespace SpecificaThor.Tests
             Assert.Equal(1, result.TotalOfWarnings);
             Assert.False(result.HasError<Expired>());
             Assert.True(result.HasWarning<Expired>());
+            Assert.True(result.HasWarning<Expired>(lot1));
             Assert.Equal(expectedWarningMessage, result.WarningMessages);
+        }
+
+        [Fact]
+        public void HasWarningCandidateNotFound()
+        {
+            var lots = new List<Lot>();
+
+            var lot1 = new LotBuilder()
+                .Expired()
+                .AvailableOnStock()
+                .Build();
+
+            var lot2 = new LotBuilder()
+                .NotExpired()
+                .AvailableOnStock()
+                .Build();
+
+            var lot3 = new LotBuilder()
+                .NotExpired()
+                .AvailableOnStock()
+                .Build();
+
+            lots.Add(lot1);
+            lots.Add(lot2);
+
+            var result = Specification
+                .Create<Lot>(lots)
+                .ThatAreNot<Expired>().AsWarning()
+                .AndAre<AvailableOnStock>()
+                .GetResults();
+
+            Assert.False(result.HasWarning<Expired>(lot3));
+        }
+
+        [Fact]
+        public void HasErrorCandidateNotFound()
+        {
+            var lots = new List<Lot>();
+
+            var lot1 = new LotBuilder()
+                .Expired()
+                .AvailableOnStock()
+                .Build();
+
+            var lot2 = new LotBuilder()
+                .NotExpired()
+                .AvailableOnStock()
+                .Build();
+
+            var lot3 = new LotBuilder()
+                .NotExpired()
+                .AvailableOnStock()
+                .Build();
+
+            lots.Add(lot1);
+            lots.Add(lot2);
+
+            var result = Specification
+                .Create<Lot>(lots)
+                .ThatAreNot<Expired>()
+                .AndAre<AvailableOnStock>()
+                .GetResults();
+
+            Assert.False(result.HasError<Expired>(lot3));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SpecificaThor
 {
@@ -22,9 +23,11 @@ namespace SpecificaThor
         internal Type GetSpecificationType()
             => _specification.GetType();
 
+        [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
             => GetSpecificationType() == (obj as SpecificationFailure<TCandidate>)?.GetSpecificationType();
 
+        [ExcludeFromCodeCoverage]
         public override int GetHashCode()
             => _specification.GetHashCode();
     }

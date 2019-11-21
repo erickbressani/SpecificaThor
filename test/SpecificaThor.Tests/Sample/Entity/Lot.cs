@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SpecificaThor.Tests.Sample
 {
+    [ExcludeFromCodeCoverage]
     public class Lot
     {
         public long Id { get; set; }

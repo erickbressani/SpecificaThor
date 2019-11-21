@@ -1,7 +1,8 @@
-﻿using SpecificaThor;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace SpecificaThor.Tests.Sample
 {
+    [ExcludeFromCodeCoverage]
     public class Interdicted : ISpecification<Lot>, IHasErrorMessageWhenExpectingTrue<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
     {
         public string GetErrorMessageWhenExpectingFalse(Lot candidate)

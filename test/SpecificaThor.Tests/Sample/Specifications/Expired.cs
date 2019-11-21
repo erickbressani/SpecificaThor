@@ -1,8 +1,9 @@
-﻿using SpecificaThor;
-using System;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SpecificaThor.Tests.Sample
 {
+    [ExcludeFromCodeCoverage]
     public class Expired : ISpecification<Lot>, IHasErrorMessageWhenExpectingFalse<Lot>
     {
         public string GetErrorMessageWhenExpectingFalse(Lot candidate)

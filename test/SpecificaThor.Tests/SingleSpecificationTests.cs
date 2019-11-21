@@ -1,11 +1,11 @@
-using SpecificaThor.Tests.Sample;
-using SpecificaThor;
-using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using SpecificaThor.Tests.Sample;
 using Xunit;
 
 namespace SpecificaThor.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class SingleSpecificationTests
     {
         [Fact]
@@ -277,6 +277,26 @@ namespace SpecificaThor.Tests
 
             Assert.False(result.IsValid);
             Assert.Equal(customErrorMessage, result.ErrorMessage);
+            Assert.Equal(1, result.TotalOfErrors);
+            Assert.True(result.HasError<Expired>());
+        }
+
+        [Fact]
+        public void ErrorMessageExpectingFalse()
+        {
+            var lot = new LotBuilder()
+                .Expired()
+                .Build();
+
+            var result = Specification
+                .Create(lot)
+                .IsNot<Expired>()
+                .GetResult();
+
+            string expectedMessage = new Expired().GetErrorMessageWhenExpectingFalse(lot);
+
+            Assert.False(result.IsValid);
+            Assert.Equal(expectedMessage, result.ErrorMessage);
             Assert.Equal(1, result.TotalOfErrors);
             Assert.True(result.HasError<Expired>());
         }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SpecificaThor.Tests.Sample
 {
+    [ExcludeFromCodeCoverage]
     public class LotBuilder
     {
         private readonly Lot _lot;
