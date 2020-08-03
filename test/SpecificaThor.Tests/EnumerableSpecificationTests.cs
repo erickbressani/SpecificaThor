@@ -217,7 +217,7 @@ namespace SpecificaThor.Tests
                 .Build();
 
             var lot2 = new LotBuilder()
-                .LotNumber("Lot22")
+                .LotNumber("Lot2")
                 .Expired()
                 .NotInterdicted()
                 .NotAvailableOnStock()
