@@ -710,38 +710,6 @@ namespace SpecificaThor.Tests
         }
 
         [Fact]
-        public void HasWarningCandidateNotFound()
-        {
-            var lots = new List<Lot>();
-
-            var lot1 = new LotBuilder()
-                .Expired()
-                .AvailableOnStock()
-                .Build();
-
-            var lot2 = new LotBuilder()
-                .NotExpired()
-                .AvailableOnStock()
-                .Build();
-
-            var lot3 = new LotBuilder()
-                .NotExpired()
-                .AvailableOnStock()
-                .Build();
-
-            lots.Add(lot1);
-            lots.Add(lot2);
-
-            var result = Specification
-                .Create<Lot>(lots)
-                .ThatAreNot<Expired>().AsWarning()
-                .AndAre<AvailableOnStock>()
-                .GetResults();
-
-            Assert.False(result.HasWarning<Expired>(lot3));
-        }
-
-        [Fact]
         public void HasErrorCandidateNotFound()
         {
             var lots = new List<Lot>();
@@ -771,6 +739,38 @@ namespace SpecificaThor.Tests
                 .GetResults();
 
             Assert.False(result.HasError<Expired>(lot3));
+        }
+
+        [Fact]
+        public void HasWarningCandidateNotFound()
+        {
+            var lots = new List<Lot>();
+
+            var lot1 = new LotBuilder()
+                .Expired()
+                .AvailableOnStock()
+                .Build();
+
+            var lot2 = new LotBuilder()
+                .NotExpired()
+                .AvailableOnStock()
+                .Build();
+
+            var lot3 = new LotBuilder()
+                .NotExpired()
+                .AvailableOnStock()
+                .Build();
+
+            lots.Add(lot1);
+            lots.Add(lot2);
+
+            var result = Specification
+                .Create<Lot>(lots)
+                .ThatAreNot<Expired>().AsWarning()
+                .AndAre<AvailableOnStock>()
+                .GetResults();
+
+            Assert.False(result.HasWarning<Expired>(lot3));
         }
     }
 }
